@@ -77,3 +77,55 @@ function openUrl($this) {
 }
 
 
+/***
+ * LEAP PROCESSING
+ */
+
+let controllerOptions = {enableGestures: true};
+let buffer = 0;
+
+Leap.loop(controllerOptions, function(frame) {
+  buffer += 1; //buffer so multiple gestures aren't recognized at once
+  if(frame.valid && frame.gestures.length > 0 && buffer > 50){
+    buffer = 0;
+    frame.gestures.forEach(function(gesture){
+      switch (gesture.type){
+        case "circle":
+          console.log("Circle Gesture");
+          var clockwise = false;
+          var pointableID = gesture.pointableIds[0];
+          var direction = frame.pointable(pointableID).direction;
+          var dotProduct = Leap.vec3.dot(direction, gesture.normal);
+          var clockwise = (dotProduct  >  0);
+          if (clockwise){
+            skip(10);
+            console.log("clockwise");
+          }else{
+            skip(-10);
+          }
+          break;
+        case "keyTap":
+          console.log("Key Tap Gesture");
+          break;
+        case "screenTap":
+          console.log("Screen Tap Gesture");
+          break;
+        case "swipe":
+          console.log("Swipe Gesture");
+          break;
+      }
+    });
+  }
+});
+
+
+/***
+ * SKIP FORWARD AND BACKWARD
+ */
+function skip(seconds){
+  var currentTime = player.getCurrentTime();
+  if((seconds > 0 && currentTime>seconds) || seconds < 0){
+    player.seekTo(currentTime - seconds, true);
+    player.playVideo();
+  }
+};
