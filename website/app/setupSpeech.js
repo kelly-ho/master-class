@@ -2,7 +2,7 @@
 /******** SPEECH RECOGNITION SETUP YOU CAN IGNORE ****************/
 /*****************************************************************/
 DEBUGSPEECH=true;
-var debouncedProcessSpeech = _.debounce(processSpeech, 500);
+var debouncedProcessSpeech = _.debounce(processSpeech, 100);
 var colors = [ 'masterclass', 'play', 'pause' ];
 var grammar = '#JSGF V1.0; grammar colors; public <color> = ' + colors.join(' | ') + ' ;'
 var speechRecognitionList = new webkitSpeechGrammarList();

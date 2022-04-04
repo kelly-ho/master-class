@@ -110,14 +110,26 @@ Leap.loop(controllerOptions, function(frame) {
           buffer = 0;
           break;
         case "keyTap":
-          console.log("Key Tap Gesture");
-          break;
         case "screenTap":
-          console.log("Screen Tap Gesture");
+          console.log("Tap Gesture");
+          if (player.getPlayerState() == -1 || player.getPlayerState() == 2){
+            player.playVideo();
+          }
+          else if (player.getPlayerState() == 1){
+            player.pauseVideo();
+          }
+          buffer = 0;
           break;
         case "swipe":
           console.log("Swipe Gesture");
           var xAxis = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+          if (xAxis){
+            if (gesture.direction[0] > 0){ //swipe right
+              player.setPlaybackRate(player.getPlaybackRate() + 0.25);
+            }else{
+              player.setPlaybackRate(player.getPlaybackRate() - 0.25);
+            }
+          }
           buffer = 0;
           break;
       }
