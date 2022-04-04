@@ -3,8 +3,12 @@
 /*****************************************************************/
 DEBUGSPEECH=true;
 var debouncedProcessSpeech = _.debounce(processSpeech, 500);
-
+var colors = [ 'masterclass', 'play', 'pause' ];
+var grammar = '#JSGF V1.0; grammar colors; public <color> = ' + colors.join(' | ') + ' ;'
+var speechRecognitionList = new webkitSpeechGrammarList();
+speechRecognitionList.addFromString(grammar, 1);
 var recognition = new webkitSpeechRecognition();
+recognition.grammars = speechRecognitionList;
 recognition.continuous = true;
 recognition.interimResults = true;
 recognition.onresult = function(event) {

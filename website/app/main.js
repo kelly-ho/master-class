@@ -6,6 +6,7 @@
 //    processed, a boolean indicating whether the system reacted to the speech or not
 var processSpeech = function(transcript) {
   // Helper function to detect if any commands appear in a string
+  transcript = transcript.toLowerCase();
   var userSaid = function(str, commands) {
     for (var i = 0; i < commands.length; i++) {
       if (str.indexOf(commands[i]) > -1)
@@ -14,11 +15,11 @@ var processSpeech = function(transcript) {
     return false;
   };
 
-  if (userSaid(transcript, ['play'])) {
-    console.log("HI");
+  if (userSaid(transcript, ['masterclass play'])) {
+    player.playVideo()
   };
-  if (userSaid(transcript, ['stop', 'pause'])) {
-    console.log("HI");
+  if (userSaid(transcript, ['masterclass stop', 'masterclass pause'])) {
+    player.pauseVideo()
   };
 };
 
@@ -67,6 +68,7 @@ function stopVideo() {
 }
 function openUrl($this) {
   var videoUrl = $this.previousElementSibling.value;
+  $this.previousElementSibling.value = '';
   if(videoUrl == ''){
       console.log('no input');
   }else{
