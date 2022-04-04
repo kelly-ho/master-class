@@ -37,12 +37,20 @@
 
   </head>
   <body>
-    <h2 class="text-center">MasterClass</h2>
+    <h2 class="text-center mt-5">MasterClass</h2>
     <span>
     </span>
-    <div class="input-group mx-auto" style="width: 50%">
-      <input type="search" class="form-control rounded" placeholder="Paste Youtube Link" aria-label="Search" aria-describedby="search-addon" />
-      <button type="button" class="btn btn-outline-primary">search</button>
+    <div class="input-group mx-auto mt-5 mb-5" style="width: 50%">
+      <input type="search" class="form-control form-control-lg rounded" placeholder="Paste Youtube Link" aria-label="Search" aria-describedby="search-addon" />
+      <button type="submit" class="btn btn-outline-primary btn-lg" onClick="javascript:searchSong();">search</button>
+    </div>
+    <div class="text-center">
+      <iframe width="560"
+              height="315"
+              src="https://www.youtube.com/embed/JdayQgrM74o"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+      </iframe>
     </div>
   </body>
 </html>
