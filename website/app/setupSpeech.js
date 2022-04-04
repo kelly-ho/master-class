@@ -25,7 +25,7 @@ recognition.onresult = function(event) {
   if (DEBUGSPEECH) {
     if (hasFinal) {
       document.getElementById("speechDebug").innerHTML = "SPEECH DEBUG:";
-    } 
+    }
     else{
       document.getElementById("speechDebug").innerHTML = "SPEECH DEBUG: " + transcript;
     }
@@ -47,7 +47,7 @@ recognition.onend = function(event) {
     recognition.start();
   }, 1000);
 };
-recognition.start();
+//recognition.start();
 /*****************************************************************/
 /******** END OF SPEECH RECOG SETUP ******************************/
 /*****************************************************************/

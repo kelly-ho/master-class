@@ -1,8 +1,8 @@
 // processSpeech(transcript)
 //  Is called anytime speech is recognized by the Web Speech API
-// Input: 
+// Input:
 //    transcript, a string of possibly multiple words that were recognized
-// Output: 
+// Output:
 //    processed, a boolean indicating whether the system reacted to the speech or not
 var processSpeech = function(transcript) {
   // Helper function to detect if any commands appear in a string
@@ -14,7 +14,7 @@ var processSpeech = function(transcript) {
     }
     return false;
   };
-
+  console.log(transcript);
   if (userSaid(transcript, ['masterclass play'])) {
     player.playVideo()
   };
@@ -87,10 +87,12 @@ let controllerOptions = {enableGestures: true};
 let buffer = 0;
 
 Leap.loop(controllerOptions, function(frame) {
+  console.log("hello");
   buffer += 1; //buffer so multiple gestures aren't recognized at once
-  if(frame.valid && frame.gestures.length > 0 && buffer > 50){
-    buffer = 0;
+  if(frame.valid && frame.gestures.length > 0 && buffer > 0){
+    console.log('enter gesture if statement');
     frame.gestures.forEach(function(gesture){
+      console.log("gesture");
       switch (gesture.type){
         case "circle":
           console.log("Circle Gesture");
@@ -105,6 +107,7 @@ Leap.loop(controllerOptions, function(frame) {
           }else{
             skip(-10);
           }
+          buffer = 0;
           break;
         case "keyTap":
           console.log("Key Tap Gesture");
@@ -114,6 +117,8 @@ Leap.loop(controllerOptions, function(frame) {
           break;
         case "swipe":
           console.log("Swipe Gesture");
+          var xAxis = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+          buffer = 0;
           break;
       }
     });
