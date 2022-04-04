@@ -942,7 +942,7 @@ const init = () => {
   setDivStyle(div);
 
   recognition = new webkitSpeechRecognition();
-  recognition.continuous = false;
+  recognition.continuous = true;
   recognition.interimResults = true;
 
   recognition.onresult = event => {

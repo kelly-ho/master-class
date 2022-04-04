@@ -65,4 +65,15 @@ function onPlayerStateChange(event) {
 function stopVideo() {
   player.stopVideo();
 }
+function openUrl($this) {
+  var videoUrl = $this.previousElementSibling.value;
+  if(videoUrl == ''){
+      console.log('no input');
+  }else{
+    var videoId = videoUrl.split('?v=').pop().split('&')[0];
+    console.log(videoId);
+    player.cueVideoById(videoId);
+  }
+}
+
 

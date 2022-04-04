@@ -42,16 +42,9 @@
     </span>
     <div class="input-group mx-auto mt-5 mb-5" style="width: 50%">
       <input type="search" class="form-control form-control-lg rounded" placeholder="Paste Youtube Link" aria-label="Search" aria-describedby="search-addon" />
-      <button type="submit" class="btn btn-outline-primary btn-lg" onClick="javascript:searchSong();">search</button>
+      <button type="submit" class="btn btn-outline-primary btn-lg" onClick="javascript:openUrl(this)">search</button>
     </div>
-    <div class="text-center">
-      <iframe width="560"
-              height="315"
-              src="https://www.youtube.com/embed/JdayQgrM74o"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen>
-      </iframe>
-    </div>
-  </body>
   <div id="speechDebug"> Speech Debug</div>
+  <div class="text-center"> <div id="player"></div></div>
+  </body>
 </html>
