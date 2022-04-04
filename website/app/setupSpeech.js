@@ -1,6 +1,7 @@
 /*****************************************************************/
 /******** SPEECH RECOGNITION SETUP YOU CAN IGNORE ****************/
 /*****************************************************************/
+DEBUGSPEECH=true;
 var debouncedProcessSpeech = _.debounce(processSpeech, 500);
 
 var recognition = new webkitSpeechRecognition();
@@ -18,10 +19,12 @@ recognition.onresult = function(event) {
   }
 
   if (DEBUGSPEECH) {
-    if (hasFinal)
-      otherFeedback.setContent("SPEECH DEBUG: ready");
-    else
-      otherFeedback.setContent("SPEECH DEBUG: " + transcript);
+    if (hasFinal) {
+      document.getElementById("speechDebug").innerHTML = "SPEECH DEBUG:";
+    } 
+    else{
+      document.getElementById("speechDebug").innerHTML = "SPEECH DEBUG: " + transcript;
+    }
   }
 
   var processed = debouncedProcessSpeech(transcript);
@@ -34,8 +37,9 @@ recognition.onresult = function(event) {
 // Restart recognition if it has stopped
 recognition.onend = function(event) {
   setTimeout(function() {
-    if (DEBUGSPEECH)
-      otherFeedback.setContent("SPEECH DEBUG: ready");
+    if (DEBUGSPEECH) {
+      document.getElementById("speechDebug").innerHTML = "SPEECH DEBUG: ready";
+    }
     recognition.start();
   }, 1000);
 };
