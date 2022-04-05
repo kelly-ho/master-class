@@ -36,16 +36,134 @@
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
   </head>
   <body>
-    <h2 class="text-center mt-5">MasterClass</h2>
-    <span>
-    </span>
-    <div class="input-group mx-auto mt-5 mb-5" style="width: 50%">
+    <h1 class="text-center mt-5">MasterClass</h1>
+
+    <h3 class="text-center mt-5">Instructions</h3>
+    <div class="mx-auto mb-5" id="accordion" style="width: 50%">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h5 class="mb-0">
+            <button class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              Voice Commands
+            </button>
+          </h5>
+        </div>
+    
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body">
+            Use the following commands to control the video. 
+            <span></span>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Action</th>
+                  <th scope="col">Command</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Play video</td>
+                  <td>masterclass play</td>
+                </tr>
+                <tr>
+                  <td>Pause video</td>
+                  <td>masterclass pause <i>or</i> masterclass stop</td>
+                </tr>
+                <tr>
+                  <td>Restart video</td>
+                  <td>masterclass restart</td>
+                </tr>
+                <tr>
+                  <td>Skip ahead by 10 seconds</td>
+                  <td>masterclass skip <i>or</i> masterclass forward</td>
+                </tr>
+                <tr>
+                  <td>Rewind by 10 seconds</td>
+                  <td>masterclass rewind <i>or</i> masterclass backwards</td>
+                </tr>
+                <tr>
+                  <td>Increase the volume by 10%</td>
+                  <td>masterclass volume up <i>or</i> masterclass louder</td>
+                </tr>
+                <tr>
+                  <td>Decrease the volume by 10%</td>
+                  <td>masterclass volume down <i>or</i> masterclass quieter</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingTwo">
+          <h5 class="mb-0">
+            <button class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Gesture Commands
+            </button>
+          </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+          <div class="card-body">
+            <div>
+              <div class="row">
+                <img class="fit-picture col-md-3" src="/img/Leap_Gesture_Circle.png">
+                <img class="fit-picture col-md-2" src="/img/Leap_Gesture_Swipe.png">
+                <img class="fit-picture col-md-3" src="/img/Leap_Gesture_Tap.png">
+              </div>
+            </div>
+            <div>
+              <br>
+              <p>From left to right the gestures represent: circle, swipe, and tap.</p>
+            </div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Action</th>
+                  <th scope="col">Gesture</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Play or pause video</td>
+                  <td>tap</td>
+                </tr>
+                <tr>
+                  <td>Skip ahead by 10 seconds</td>
+                  <td>swipe right</td>
+                </tr>
+                <tr>
+                  <td>Rewind by 10 seconds</td>
+                  <td>swipe left</td>
+                </tr>
+                <tr>
+                  <td>Increase the speed by 0.25</td>
+                  <td>circle clockwise</td>
+                </tr>
+                <tr>
+                  <td>Decrease the speed by 0.25</td>
+                  <td>circle counterclockwise</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-group mx-auto mt-2 mb-5" style="width: 50%">
       <input type="search" class="form-control form-control-lg rounded" placeholder="Paste Youtube Link" aria-label="Search" aria-describedby="search-addon" />
       <button type="submit" class="btn btn-outline-primary btn-lg" onClick="javascript:openUrl(this)">search</button>
     </div>
-  <div id="speechDebug"> Speech Debug</div>
-  <div class="text-center"> <div id="player"></div></div>
+    <div class="text-center"> <div id="player"></div></div>
+    <div class="text-center" id="speechDebug"> Speech Debug</div>
   </body>
 </html>
+
+
+
+
