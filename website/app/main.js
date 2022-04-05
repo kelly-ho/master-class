@@ -18,10 +18,28 @@ var processSpeech = function(transcript) {
   console.log(transcript);
   if (userSaid(transcript, ['masterclass play'])) {
     player.playVideo()
-  };
-  if (userSaid(transcript, ['masterclass stop', 'masterclass pause'])) {
+  }
+  else if (userSaid(transcript, ['masterclass stop', 'masterclass pause'])) {
     player.pauseVideo()
-  };
+  }
+  else if (userSaid(transcript, ['masterclass restart'])) {
+    player.seekTo(Number('0'), true)
+  }
+  else if (userSaid(transcript, ['masterclass skip', 'masterclass forward'])) {
+    player.seekTo(player.getCurrentTime()+10, true)
+  }
+  else if (userSaid(transcript, ['masterclass rewind', 'masterclass backwards'])) {
+    player.seekTo(player.getCurrentTime()-10, true)
+  }
+  else if (userSaid(transcript, ['masterclass volume up', 'masterclass louder'])) {
+    var volume = player.getVolume() + 10;
+    player.setVolume(volume.clamp(0,100)); 
+  }
+  else if (userSaid(transcript, ['masterclass volume down', 'masterclass quieter'])) {
+    var volume = player.getVolume() - 10;
+    player.setVolume(volume.clamp(0,100)); 
+  }
+  ;
 };
 
 // From tutorial https://developers.google.com/youtube/iframe_api_reference#Getting_Started
