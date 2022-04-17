@@ -256,6 +256,25 @@ function skip(seconds){
         context.font = "16pt Comic Sans MS";
         context.fillStyle = "#FF0000";
         context.fillText(text,425,20);
+
+        const GE = new fingerpose.GestureEstimator([
+          fingerpose.Gestures.VictoryGesture,
+          fingerpose.Gestures.ThumbsUpGesture,
+        ]);
+        const gesture = await GE.estimate(hand[0].landmarks, 4);
+        console.log(gesture);
+        // if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
+        //   // console.log(gesture.gestures);
+
+        //   const confidence = gesture.gestures.map(
+        //     (prediction) => prediction.confidence
+        //   );
+        //   const maxConfidence = confidence.indexOf(
+        //     Math.max.apply(null, confidence)
+        //   );
+        //   // console.log(gesture.gestures[maxConfidence].name);
+        //   setEmoji(gesture.gestures[maxConfidence].name);
+        //   console.log(emoji);
       }
       //////////////////////////////////////////////////////
     }
