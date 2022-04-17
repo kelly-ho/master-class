@@ -4,7 +4,7 @@
 //    transcript, a string of possibly multiple words that were recognized
 // Output:
 //    processed, a boolean indicating whether the system reacted to the speech or not
-
+// import * as fpg from "fingerpose-gestures";
 var processSpeech = function(transcript) {
   // Helper function to detect if any commands appear in a string
   transcript = transcript.toLowerCase();
@@ -257,11 +257,11 @@ function skip(seconds){
         context.fillStyle = "#FF0000";
         context.fillText(text,425,20);
 
-        const GE = new fingerpose.GestureEstimator([
-          fingerpose.Gestures.VictoryGesture,
-          fingerpose.Gestures.ThumbsUpGesture,
+        const GE = new fp.GestureEstimator([
+          fp.Gestures.VictoryGesture,
+          fp.Gestures.ThumbsUpGesture,
         ]);
-        const gesture = await GE.estimate(hand[0].landmarks, 4);
+        const gesture = await GE.estimate(predictions[0].landmarks, 4);
         console.log(gesture);
         // if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
         //   // console.log(gesture.gestures);
