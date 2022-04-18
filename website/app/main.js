@@ -219,13 +219,16 @@ function skip(seconds){
 
 const FistGesture = new fp.GestureDescription('fist'); // ✊️
 const OpenPalmGesture = new fp.GestureDescription('open_palm'); // 🖐
+const PointLeftGesture = new fp.GestureDescription('point_left'); // 🖐
+const PointRightGesture = new fp.GestureDescription('point_right'); // 🖐
+
 // Fist
 // -----------------------------------------------------------------------------
 
 // thumb: half curled
 // accept no curl with a bit lower confidence
 FistGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.HalfCurl, 1.0);
-FistGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.NoCurl, 0.5);
+FistGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.NoCurl, 1.0);
 
 // all other fingers: curled
 for(let finger of [fp.Finger.Index, fp.Finger.Middle, fp.Finger.Ring, fp.Finger.Pinky]) {
@@ -234,12 +237,41 @@ for(let finger of [fp.Finger.Index, fp.Finger.Middle, fp.Finger.Ring, fp.Finger.
 }
 // Paper
 // -----------------------------------------------------------------------------
-
 // no finger should be curled
 for(let finger of fp.Finger.all) {
     OpenPalmGesture.addCurl(finger, fp.FingerCurl.NoCurl, 1.0);
 }
+OpenPalmGesture.addDirection(fp.Finger.Middle, fp.FingerDirection.VerticalUp, 1.0);
 
+PointRightGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.NoCurl, 1.0);
+PointRightGesture.addCurl(fp.Finger.Pointer, fp.FingerCurl.NoCurl, 1.0);
+PointRightGesture.addDirection(fp.Finger.Pointer, fp.FingerDirection.HorizontalLeft, 1.0);
+PointRightGesture.addDirection(fp.Finger.Pointer, fp.FingerDirection.DiagonalUpLeft, 0.5);
+PointRightGesture.addDirection(fp.Finger.Pointer, fp.FingerDirection.DiagonalDownLeft, 0.5);
+PointRightGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.DiagonalUp, 0.5);
+PointRightGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.DiagonalUpLeft, 0.9);
+PointRightGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.VerticalUp, 0.5);
+PointRightGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.HorizontalLeft, 0.2);
+
+for(let finger of [fp.Finger.Middle, fp.Finger.Ring, fp.Finger.Pinky]) {
+  PointRightGesture.addCurl(finger, fp.FingerCurl.FullCurl, 1.0);
+  PointRightGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 0.9);
+}
+
+PointLeftGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.NoCurl, 1.0);
+PointLeftGesture.addCurl(fp.Finger.Pointer, fp.FingerCurl.NoCurl, 1.0);
+PointLeftGesture.addDirection(fp.Finger.Pointer, fp.FingerDirection.HorizontalRight, 1.0);
+PointLeftGesture.addDirection(fp.Finger.Pointer, fp.FingerDirection.DiagonalUpRight, 0.5);
+PointLeftGesture.addDirection(fp.Finger.Pointer, fp.FingerDirection.DiagonalDownRight, 0.5);
+PointLeftGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.DiagonalUp, 0.5);
+PointLeftGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.DiagonalUpRight, 0.9);
+PointLeftGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.VerticalUp, 0.5);
+PointLeftGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.HorizontalRight, 0.2);
+
+for(let finger of [fp.Finger.Middle, fp.Finger.Ring, fp.Finger.Pinky]) {
+  PointLeftGesture.addCurl(finger, fp.FingerCurl.FullCurl, 1.0);
+  PointLeftGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 0.9);
+}
 
 
 const fingerJoints = {
@@ -355,6 +387,8 @@ const drawHand = (predictions, ctx) => {
           // fp.Gestures.ThumbsUpGesture,
           FistGesture,
           OpenPalmGesture,
+          PointLeftGesture,
+          PointRightGesture,
         ]);
         const gesture = await GE.estimate(predictions[0].landmarks, 9);
         console.log('gesture', gesture);
@@ -368,6 +402,12 @@ const drawHand = (predictions, ctx) => {
           }
           else if (maxConfidenceGesture.name == 'fist') {
             player.pauseVideo();
+          }
+          else if (maxConfidenceGesture.name == 'point_left') {
+            skip(-10);
+          }
+          else if (maxConfidenceGesture.name == 'point_right') {
+            skip(10);
           }
           // if(gesture == lastGesture) {
           //   console.log("Returned ", gesture.gestures)
