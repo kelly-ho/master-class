@@ -1,5 +1,3 @@
-import { FistGesture, OpenPalmGesture } from './gestures.js';
-
 // processSpeech(transcript)
 //  Is called anytime speech is recognized by the Web Speech API
 // Input:
@@ -219,70 +217,30 @@ function skip(seconds){
 //
 // resetInterval()
 
-/////////////////////////////////////////////////////////////////////
-(function() {
-  var canvas = document.getElementById('canvas');
-  var context = canvas.getContext('2d');
-  var video = document.getElementById('videoElement');
-  /////////////////////////////////////////////////////////////////
-  if (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true,
-      audio:false })
-        .then(function (stream) {
-          video.srcObject = stream;
-        })
-        .catch(function (err) {
-          console.log("Something went wrong!");
-        });
-  }
-  ///////////////////////////////////////////////////////////////
-  video.addEventListener('play',function()
-  {
-    draw(this, context,640,480);
-  },false);
-  ///////////////////////////////////////////////////////////////
+const FistGesture = new fp.GestureDescription('fist'); // ✊️
+const OpenPalmGesture = new fp.GestureDescription('open_palm'); // 🖐
+// Fist
+// -----------------------------------------------------------------------------
 
-  let lastGesture = "";
-  async function draw(video,context, width, height){
-    context.drawImage(video,0,0,width,height);
-    const model = await handpose.load();
+// thumb: half curled
+// accept no curl with a bit lower confidence
+FistGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.HalfCurl, 1.0);
+FistGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.NoCurl, 0.5);
 
-    const predictions = await model.estimateHands(video);
-    // console.log(predictions);
-    ///////////////////////////////////////////////////////////
-    if (predictions.length > 0){
-      for (let i = 0; i < predictions.length; i++) {
-        drawHand(predictions,context);
+// all other fingers: curled
+for(let finger of [fp.Finger.Index, fp.Finger.Middle, fp.Finger.Ring, fp.Finger.Pinky]) {
+    FistGesture.addCurl(finger, fp.FingerCurl.FullCurl, 1.0);
+    FistGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 0.9);
+}
+// Paper
+// -----------------------------------------------------------------------------
 
-        var probability = predictions[i].handInViewConfidence;
-        var prob = (probability*100).toPrecision(5).toString();
-        var text = "Confidence:"+prob+"%";
-        context.font = "16pt Comic Sans MS";
-        context.fillStyle = "#FF0000";
-        context.fillText(text,425,20);
-        const GE = new fp.GestureEstimator([
-          fp.Gestures.VictoryGesture,
-          fp.Gestures.ThumbsUpGesture,
-          FistGesture,
-          OpenPalmGesture,
-        ]);
-        const gesture = await GE.estimate(predictions[0].landmarks, 8);
-        console.log('gesture', gesture);
-        if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
-          console.log(gesture.gestures);
-          if(gesture == lastGesture) {
-            console.log("Returned ", gesture.gestures)
-          }
-          lastGesture = gesture;
+// no finger should be curled
+for(let finger of fp.Finger.all) {
+    OpenPalmGesture.addCurl(finger, fp.FingerCurl.NoCurl, 1.0);
+}
 
-        }
-      }
-      //////////////////////////////////////////////////////
-    }
-    setTimeout(draw,100,video,context,width,height);
-    /////////////////////////////////////////////////////////
-  }
-})();
+
 
 const fingerJoints = {
   thumb: [0, 1, 2, 3, 4],
@@ -350,3 +308,77 @@ const drawHand = (predictions, ctx) => {
     });
   }
 };
+
+/////////////////////////////////////////////////////////////////////
+(function() {
+  var canvas = document.getElementById('canvas');
+  var context = canvas.getContext('2d');
+  var video = document.getElementById('videoElement');
+  /////////////////////////////////////////////////////////////////
+  if (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true,
+      audio:false })
+        .then(function (stream) {
+          video.srcObject = stream;
+        })
+        .catch(function (err) {
+          console.log("Something went wrong!");
+        });
+  }
+  ///////////////////////////////////////////////////////////////
+  video.addEventListener('play',function()
+  {
+    draw(this, context,640,480);
+  },false);
+  ///////////////////////////////////////////////////////////////
+
+  let lastGesture = "";
+  async function draw(video,context, width, height){
+    context.drawImage(video,0,0,width,height);
+    const model = await handpose.load();
+
+    const predictions = await model.estimateHands(video);
+    // console.log(predictions);
+    ///////////////////////////////////////////////////////////
+    if (predictions.length > 0){
+      for (let i = 0; i < predictions.length; i++) {
+        drawHand(predictions,context);
+
+        var probability = predictions[i].handInViewConfidence;
+        var prob = (probability*100).toPrecision(5).toString();
+        var text = "Confidence:"+prob+"%";
+        context.font = "16pt Comic Sans MS";
+        context.fillStyle = "#FF0000";
+        context.fillText(text,425,20);
+        const GE = new fp.GestureEstimator([
+          // fp.Gestures.VictoryGesture,
+          // fp.Gestures.ThumbsUpGesture,
+          FistGesture,
+          OpenPalmGesture,
+        ]);
+        const gesture = await GE.estimate(predictions[0].landmarks, 9);
+        console.log('gesture', gesture);
+        if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
+          const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 
+            return (p.confidence > c.confidence) ? p : c;
+          });
+          console.log(maxConfidenceGesture.name)
+          if (maxConfidenceGesture.name == 'open_palm') {
+            player.playVideo();
+          }
+          else if (maxConfidenceGesture.name == 'fist') {
+            player.pauseVideo();
+          }
+          // if(gesture == lastGesture) {
+          //   console.log("Returned ", gesture.gestures)
+          // }
+          // lastGesture = gesture;
+
+        }
+      }
+      //////////////////////////////////////////////////////
+    }
+    setTimeout(draw,100,video,context,width,height);
+    /////////////////////////////////////////////////////////
+  }
+})();
