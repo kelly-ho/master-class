@@ -65,38 +65,38 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col">Action</th>
                   <th scope="col">Command</th>
+                  <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Play video</td>
                   <td>masterclass play</td>
+                  <td>Play video</td>
                 </tr>
                 <tr>
-                  <td>Pause video</td>
                   <td>masterclass pause <i>or</i> masterclass stop</td>
+                  <td>Pause video</td>
                 </tr>
                 <tr>
-                  <td>Restart video</td>
                   <td>masterclass restart</td>
+                  <td>Restart video</td>
                 </tr>
                 <tr>
-                  <td>Skip ahead by 10 seconds</td>
                   <td>masterclass skip <i>or</i> masterclass forward</td>
+                  <td>Skip ahead by 10 seconds</td>
                 </tr>
                 <tr>
-                  <td>Rewind by 10 seconds</td>
                   <td>masterclass rewind <i>or</i> masterclass backwards</td>
+                  <td>Rewind by 10 seconds</td>
                 </tr>
                 <tr>
-                  <td>Increase the volume by 10%</td>
                   <td>masterclass volume up <i>or</i> masterclass louder</td>
+                  <td>Increase the volume by 10%</td>
                 </tr>
                 <tr>
-                  <td>Decrease the volume by 10%</td>
                   <td>masterclass volume down <i>or</i> masterclass quieter</td>
+                  <td>Decrease the volume by 10%</td>
                 </tr>
               </tbody>
             </table>
@@ -127,30 +127,34 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col">Action</th>
                   <th scope="col">Gesture</th>
+                  <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Play or pause video</td>
-                  <td>tap</td>
+                  <td>Open Palm</td>
+                  <td>Play Video</td>
                 </tr>
                 <tr>
+                  <td>Fist</td>
+                  <td>Pause Video</td>
+                </tr>
+                <tr>
+                  <td>Point Right</td>
                   <td>Skip ahead by 10 seconds</td>
-                  <td>swipe right</td>
                 </tr>
                 <tr>
+                  <td>Point Left</td>
                   <td>Rewind by 10 seconds</td>
-                  <td>swipe left</td>
                 </tr>
                 <tr>
+                  <td>Two Finger Up</td>
                   <td>Increase the speed by 0.25</td>
-                  <td>circle clockwise</td>
                 </tr>
                 <tr>
+                  <td>Two Finger Down</td>
                   <td>Decrease the speed by 0.25</td>
-                  <td>circle counterclockwise</td>
                 </tr>
               </tbody>
             </table>
@@ -165,6 +169,9 @@
     </div>
     <div class="text-center"> <div id="player"></div></div>
     <div class="text-center" id="speechDebug"> Speech Debug</div>
+    <div class="text-center" id="volumeDebug"> Volume Debug</div>
+    <div class="text-center" id="speedDebug"> Speed Debug</div>
+    <div class="text-center" id="videoPositionDebug"> Video Position Debug</div>
 
     <div id="videoContainer">
       <video autoplay="true" id="videoElement" style="display:none"></video>

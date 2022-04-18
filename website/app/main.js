@@ -437,6 +437,14 @@ const drawHand = (predictions, ctx) => {
           else if (maxConfidenceGesture.name == 'point_right') {
             skip(10);
           }
+          else if (maxConfidenceGesture.name == 'point_up'){
+            var volume = player.getVolume() + 10;
+            player.setVolume(Math.max(Math.min(volume, 100), 0));
+          }
+          else if (maxConfidenceGesture.name == 'point_down'){
+            var volume = player.getVolume() - 10;
+            player.setVolume(Math.max(Math.min(volume, 100), 0));
+          }
           // if(gesture == lastGesture) {
           //   console.log("Returned ", gesture.gestures)
           // }
