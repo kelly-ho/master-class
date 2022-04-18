@@ -1,10 +1,11 @@
+import { FistGesture, OpenPalmGesture } from './gestures.js';
+
 // processSpeech(transcript)
 //  Is called anytime speech is recognized by the Web Speech API
 // Input:
 //    transcript, a string of possibly multiple words that were recognized
 // Output:
 //    processed, a boolean indicating whether the system reacted to the speech or not
-// import * as fpg from "fingerpose-gestures";
 var processSpeech = function(transcript) {
   // Helper function to detect if any commands appear in a string
   transcript = transcript.toLowerCase();
@@ -15,7 +16,6 @@ var processSpeech = function(transcript) {
     }
     return false;
   };
-  console.log(transcript);
   if (userSaid(transcript, ['masterclass play'])) {
     player.playVideo()
   }
@@ -241,6 +241,7 @@ function skip(seconds){
     draw(this, context,640,480);
   },false);
   ///////////////////////////////////////////////////////////////
+
   async function draw(video,context, width, height){
     context.drawImage(video,0,0,width,height);
     const model = await handpose.load();
@@ -250,6 +251,7 @@ function skip(seconds){
     if (predictions.length > 0){
       for (let i = 0; i < predictions.length; i++) {
         drawHand(predictions,context);
+
         var probability = predictions[i].handInViewConfidence;
         var prob = (probability*100).toPrecision(5).toString();
         var text = "Confidence:"+prob+"%";
@@ -260,6 +262,8 @@ function skip(seconds){
         const GE = new fp.GestureEstimator([
           fp.Gestures.VictoryGesture,
           fp.Gestures.ThumbsUpGesture,
+          FistGesture,
+          OpenPalmGesture,
         ]);
         const gesture = await GE.estimate(predictions[0].landmarks, 4);
         console.log(gesture);
