@@ -88,9 +88,9 @@ function onPlayerReady(event) {
 //    the player should play for six seconds and then stop.
 var done = false;
 function onPlayerStateChange(event) {
-  console.log("HELLOOOOO");
-  console.log(document.getElementById("title"));
-  document.getElementById("title").focus();
+  // console.log("HELLOOOOO");
+  // console.log(document.getElementById("title"));
+  // document.getElementById("title").focus();
   // if (event.data == YT.PlayerState.PLAYING && !done) {
   //   setTimeout(stopVideo, 1000);
   //   console.log("STEP 5");
@@ -242,11 +242,13 @@ function skip(seconds){
   },false);
   ///////////////////////////////////////////////////////////////
 
+  let lastGesture = "";
   async function draw(video,context, width, height){
     context.drawImage(video,0,0,width,height);
     const model = await handpose.load();
+
     const predictions = await model.estimateHands(video);
-    console.log(predictions);
+    // console.log(predictions);
     ///////////////////////////////////////////////////////////
     if (predictions.length > 0){
       for (let i = 0; i < predictions.length; i++) {
@@ -258,31 +260,26 @@ function skip(seconds){
         context.font = "16pt Comic Sans MS";
         context.fillStyle = "#FF0000";
         context.fillText(text,425,20);
-
         const GE = new fp.GestureEstimator([
           fp.Gestures.VictoryGesture,
           fp.Gestures.ThumbsUpGesture,
           FistGesture,
           OpenPalmGesture,
         ]);
-        const gesture = await GE.estimate(predictions[0].landmarks, 4);
-        console.log(gesture);
-        // if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
-        //   // console.log(gesture.gestures);
+        const gesture = await GE.estimate(predictions[0].landmarks, 8);
+        console.log('gesture', gesture);
+        if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
+          console.log(gesture.gestures);
+          if(gesture == lastGesture) {
+            console.log("Returned ", gesture.gestures)
+          }
+          lastGesture = gesture;
 
-        //   const confidence = gesture.gestures.map(
-        //     (prediction) => prediction.confidence
-        //   );
-        //   const maxConfidence = confidence.indexOf(
-        //     Math.max.apply(null, confidence)
-        //   );
-        //   // console.log(gesture.gestures[maxConfidence].name);
-        //   setEmoji(gesture.gestures[maxConfidence].name);
-        //   console.log(emoji);
+        }
       }
       //////////////////////////////////////////////////////
     }
-    setTimeout(draw,250,video,context,width,height);
+    setTimeout(draw,100,video,context,width,height);
     /////////////////////////////////////////////////////////
   }
 })();
