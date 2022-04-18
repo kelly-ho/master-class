@@ -71,30 +71,14 @@ function onYouTubeIframeAPIReady() {
     },
     events: {
       'onReady': onPlayerReady,
-      'onStateChange': onPlayerStateChange
     }
   });
 }
 
-// 4. The API will call this function when the video player is ready.
 function onPlayerReady(event) {
   event.target.playVideo();
 }
 
-// 5. The API calls this function when the player's state changes.
-//    The function indicates that when playing a video (state=1),
-//    the player should play for six seconds and then stop.
-var done = false;
-function onPlayerStateChange(event) {
-  // console.log("HELLOOOOO");
-  // console.log(document.getElementById("title"));
-  // document.getElementById("title").focus();
-  // if (event.data == YT.PlayerState.PLAYING && !done) {
-  //   setTimeout(stopVideo, 1000);
-  //   console.log("STEP 5");
-  //   done = true;
-  // }
-}
 function stopVideo() {
   player.stopVideo();
 }
@@ -178,14 +162,13 @@ Leap.loop(controllerOptions, function(frame) {
   }
 });
 */
+
 function increaseSpeed() {
   player.setPlaybackRate(player.getPlaybackRate() + 0.25);
 }
 function decreaseSpeed() {
   player.setPlaybackRate(player.getPlaybackRate() - 0.25);
 }
-
-
 
 /***
  * SKIP FORWARD AND BACKWARD
@@ -221,6 +204,9 @@ const FistGesture = new fp.GestureDescription('fist'); // ✊️
 const OpenPalmGesture = new fp.GestureDescription('open_palm'); // 🖐
 const PointLeftGesture = new fp.GestureDescription('point_left'); // 🖐
 const PointRightGesture = new fp.GestureDescription('point_right'); // 🖐
+const PointUpGesture = new fp.GestureDescription('point_up');
+const PointDownGesture = new fp.GestureDescription('point_down');
+
 
 // Fist
 // -----------------------------------------------------------------------------
@@ -233,9 +219,9 @@ FistGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.NoCurl, 1.0);
 // all other fingers: curled
 for(let finger of [fp.Finger.Index, fp.Finger.Middle, fp.Finger.Ring, fp.Finger.Pinky]) {
     FistGesture.addCurl(finger, fp.FingerCurl.FullCurl, 1.0);
-    FistGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 0.9);
+    FistGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 0.7);
 }
-// Paper
+// Open palm
 // -----------------------------------------------------------------------------
 // no finger should be curled
 for(let finger of fp.Finger.all) {
@@ -243,6 +229,8 @@ for(let finger of fp.Finger.all) {
 }
 OpenPalmGesture.addDirection(fp.Finger.Middle, fp.FingerDirection.VerticalUp, 1.0);
 
+// Point right
+// -----------------------------------------------------------------------------
 PointRightGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.NoCurl, 1.0);
 PointRightGesture.addCurl(fp.Finger.Pointer, fp.FingerCurl.NoCurl, 1.0);
 PointRightGesture.addDirection(fp.Finger.Pointer, fp.FingerDirection.HorizontalLeft, 1.0);
@@ -258,6 +246,8 @@ for(let finger of [fp.Finger.Middle, fp.Finger.Ring, fp.Finger.Pinky]) {
   PointRightGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 0.9);
 }
 
+// Point left
+// -----------------------------------------------------------------------------
 PointLeftGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.NoCurl, 1.0);
 PointLeftGesture.addCurl(fp.Finger.Pointer, fp.FingerCurl.NoCurl, 1.0);
 PointLeftGesture.addDirection(fp.Finger.Pointer, fp.FingerDirection.HorizontalRight, 1.0);
@@ -272,6 +262,43 @@ for(let finger of [fp.Finger.Middle, fp.Finger.Ring, fp.Finger.Pinky]) {
   PointLeftGesture.addCurl(finger, fp.FingerCurl.FullCurl, 1.0);
   PointLeftGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 0.9);
 }
+
+// Point up
+// -----------------------------------------------------------------------------
+for(let finger of [fp.Finger.Pointer, fp.Finger.Middle]) {
+  PointUpGesture.addCurl(finger, fp.FingerCurl.NoCurl, 1.0);
+  PointUpGesture.addDirection(finger, fp.FingerDirection.VerticalUp, 1.3);
+
+}
+for(let finger of [fp.Finger.Thumb, fp.Finger.Ring, fp.Finger.Pinky]) {
+  PointUpGesture.addCurl(finger, fp.FingerCurl.FullCurl, 1.0);
+  PointUpGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 1.0);
+  PointUpGesture.addDirection(finger, fp.FingerDirection.VerticalUp, 1.0);
+  PointUpGesture.addDirection(finger, fp.FingerDirection.DiagonalUpLeft, 0.5);
+  PointUpGesture.addDirection(finger, fp.FingerDirection.DiagonalUpRight, 0.5);
+
+}
+
+// Point down
+// -----------------------------------------------------------------------------
+for(let finger of [fp.Finger.Pointer, fp.Finger.Middle]) {
+  PointDownGesture.addCurl(finger, fp.FingerCurl.NoCurl, 1.0);
+  PointDownGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 0.5);
+  PointDownGesture.addDirection(finger, fp.FingerDirection.VerticalDown, 1.5);
+  PointDownGesture.addDirection(finger, fp.FingerDirection.DiagonalDownLeft, 0.7);
+  PointDownGesture.addDirection(finger, fp.FingerDirection.DiagonalDownRight, 0.7);
+}
+for(let finger of [fp.Finger.Ring, fp.Finger.Pinky]) {
+  PointDownGesture.addCurl(finger, fp.FingerCurl.FullCurl, 1.0);
+  PointDownGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 1.0);
+  PointDownGesture.addDirection(finger, fp.FingerDirection.VerticalDown, 1.0);
+  PointDownGesture.addDirection(finger, fp.FingerDirection.DiagonalDownLeft, 0.7);
+  PointDownGesture.addDirection(finger, fp.FingerDirection.DiagonalDownRight, 0.7);
+
+}
+PointDownGesture.addCurl(fp.Finger.Thumb, fp.FingerCurl.NoCurl, 1.0);
+PointDownGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.VerticalDown, 1.0);
+
 
 
 const fingerJoints = {
@@ -384,13 +411,14 @@ const drawHand = (predictions, ctx) => {
         context.fillText(text,425,20);
         const GE = new fp.GestureEstimator([
           // fp.Gestures.VictoryGesture,
-          // fp.Gestures.ThumbsUpGesture,
+          PointDownGesture,
           FistGesture,
           OpenPalmGesture,
           PointLeftGesture,
           PointRightGesture,
+          PointUpGesture,
         ]);
-        const gesture = await GE.estimate(predictions[0].landmarks, 9);
+        const gesture = await GE.estimate(predictions[0].landmarks, 8);
         console.log('gesture', gesture);
         if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
           const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 
