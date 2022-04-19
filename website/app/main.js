@@ -94,75 +94,6 @@ function openUrl($this) {
   }
 }
 
-
-/***
- * LEAP PROCESSING
- */
-/*
-let controllerOptions = {enableGestures: true};
-let buffer = 0;
-
-Leap.loop(controllerOptions, function(frame) {
-  buffer += 1; //buffer so multiple gestures aren't recognized at once
-  console.log(buffer);
-  if(frame.gestures.length > 0 && buffer > 200){
-    console.log("gesture", frame.gestures.length);
-    for(let i=0; frame.gestures.length; i++) {
-      if (buffer === 0) { //gesture completed
-        break;
-      }
-      var gesture = frame.gestures[i];
-      if (!gesture) {
-        continue;
-      }
-      switch (gesture.type) {
-        case "circle":
-          console.log("Circle Gesture");
-          var pointableID = gesture.pointableIds[0];
-          var direction = frame.pointable(pointableID).direction;
-          if (!(pointableID && direction)) break;
-          var dotProduct = Leap.vec3.dot(direction, gesture.normal);
-          var clockwise = (dotProduct > 0);
-          if (clockwise) {
-            skip(10);
-            console.log("clockwise");
-          } else {
-            skip(-10);
-          }
-          buffer = 0;
-          break;
-        case "keyTap":
-        case "screenTap":
-          console.log("Tap Gesture");
-          if (player.getPlayerState() == -1 || player.getPlayerState() == 2) {
-            player.playVideo();
-          } else if (player.getPlayerState() == 1) {
-            player.pauseVideo();
-          }
-          buffer = 0;
-          break;
-        case "swipe":
-          console.log("Swipe Gesture");
-          var xAxis = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
-          if (xAxis) {
-            console.log("swipe along x axis");
-            if (gesture.direction[0] > 0) { //swipe right
-              increaseSpeed();
-            } else {
-              decreaseSpeed();
-            }
-            buffer = 0;
-          }
-          break;
-        default:
-          break;
-      }
-    }
-
-  }
-});
-*/
-
 function increaseSpeed() {
   player.setPlaybackRate(player.getPlaybackRate() + 0.25);
 }
@@ -325,7 +256,7 @@ const drawHand = (predictions, ctx) => {
     predictions.forEach((prediction) => {
       // Grab landmarks
       const landmarks = prediction.landmarks;
-
+      console.log(landmarks)
       // Loop through fingers
       for (let j = 0; j < Object.keys(fingerJoints).length; j++) {
         let finger = Object.keys(fingerJoints)[j];
@@ -338,15 +269,15 @@ const drawHand = (predictions, ctx) => {
           // Draw path
           ctx.beginPath();
           ctx.moveTo(
-              landmarks[firstJointIndex][0],
-              landmarks[firstJointIndex][1]
+              landmarks[firstJointIndex][0]/2,
+              landmarks[firstJointIndex][1]/2,
           );
           ctx.lineTo(
-              landmarks[secondJointIndex][0],
-              landmarks[secondJointIndex][1]
+              landmarks[secondJointIndex][0]/2,
+              landmarks[secondJointIndex][1]/2
           );
           ctx.strokeStyle = "plum";
-          ctx.lineWidth = 4;
+          ctx.lineWidth = 2;
           ctx.stroke();
         }
       }
@@ -354,9 +285,9 @@ const drawHand = (predictions, ctx) => {
       // Loop through landmarks and draw em
       for (let i = 0; i < landmarks.length; i++) {
         // Get x point
-        const x = landmarks[i][0];
+        const x = landmarks[i][0]/2;
         // Get y point
-        const y = landmarks[i][1];
+        const y = landmarks[i][1]/2;
         // Start drawing
         ctx.beginPath();
         ctx.arc(x, y, style[i]["size"], 0, 3 * Math.PI);
@@ -387,7 +318,7 @@ const drawHand = (predictions, ctx) => {
   ///////////////////////////////////////////////////////////////
   video.addEventListener('play',function()
   {
-    draw(this, context,640,480);
+    draw(this, context,320,240);
   },false);
   ///////////////////////////////////////////////////////////////
 
@@ -397,6 +328,13 @@ const drawHand = (predictions, ctx) => {
     const model = await handpose.load();
 
     const predictions = await model.estimateHands(video);
+    document.getElementById("speedDebug").innerHTML = "SPEED DEBUG: " +  player.getPlaybackRate();
+    var date = new Date(0);
+    date.setSeconds(player.getCurrentTime()); // specify value for SECONDS here
+    var timeString = date.toISOString().substr(11, 8);
+    document.getElementById("videoPositionDebug").innerHTML = "Video Position Debug: " + timeString;
+    document.getElementById("volumeDebug").innerHTML = "VOLUME DEBUG: " + player.getVolume();
+  
     // console.log(predictions);
     ///////////////////////////////////////////////////////////
     if (predictions.length > 0){
@@ -425,6 +363,7 @@ const drawHand = (predictions, ctx) => {
             return (p.confidence > c.confidence) ? p : c;
           });
           console.log(maxConfidenceGesture.name)
+          document.getElementById("gestureDebug").innerHTML = "GESTURE DEBUG: " + maxConfidenceGesture.name;
           if (maxConfidenceGesture.name == 'open_palm') {
             player.playVideo();
           }
@@ -458,3 +397,4 @@ const drawHand = (predictions, ctx) => {
     /////////////////////////////////////////////////////////
   }
 })();
+
