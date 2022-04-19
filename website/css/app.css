@@ -1,16 +1,15 @@
 button:focus {outline:0 !important;}
 
 #videoElement {
-    width: 320px;
-    height: 240px;
+    width: 256px;
+    height: 192px;
 }
 #videoContainer {
-    /* margin: 0px auto; */
-    width: 330px;
-    height: 250px;
+    margin: 0px auto;
+    width: 266px;
+    height: 202px;
     border: 5px #333 solid;
-    position: relative;
-    left: 1400px;
-    top: -700px;
-
+    position: fixed;
+    right: 2.5%;
+    top: 35%;
 }
