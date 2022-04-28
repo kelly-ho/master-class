@@ -39,8 +39,12 @@
     <script src="https://unpkg.com/@tensorflow/tfjs-converter@2.1.0/dist/tf-converter.js"></script>
 
     <!-- TF.js backend -->
-    <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@2.1.0/dist/tf-backend-webgl.js"></script>
-    <script src="https://unpkg.com/@tensorflow-models/handpose@0.0.6/dist/handpose.js"></script>
+    <!-- <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@2.1.0/dist/tf-backend-webgl.js"></script>
+    <script src="https://unpkg.com/@tensorflow-models/handpose@0.0.6/dist/handpose.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://unpkg.com/fingerpose@0.0.2/dist/fingerpose.js"></script>
     
   </head>
@@ -160,11 +164,11 @@
                 </tr>
                 <tr>
                   <td>Point up with two fingers</td>
-                  <td>Increase the speed by 0.25</td>
+                  <td>Increase the volume by 10%</td>
                 </tr>
                 <tr>
                   <td>Point down with two fingers</td>
-                  <td>Decrease the speed by 0.25</td>
+                  <td>Decrease the volume by 10%</td>
                 </tr>
               </tbody>
             </table>
@@ -178,17 +182,20 @@
       <button type="submit" class="btn btn-outline-primary btn-lg" onClick="javascript:openUrl(this)">search</button>
     </div>
     <div class="text-center"> <div id="player"></div></div>
+    <div id="videoContainer">
+      <!-- <video autoplay="true" id="videoElement" style="display:none"></video>
+      <canvas id="canvas" width="320" height="240"></canvas> -->
+      <video autoplay="true" class="input_video" style="display:none"></video>
+      <canvas class="output_canvas" width="320" height="240"></canvas>
+      <div class="text-center" id="gestureDebug"> Gesture Debug</div>
+    </div>
     <div class="text-center" id="speechDebug"> Speech Debug</div>
     <div class="text-center" id="volumeDebug"> Volume Debug</div>
     <div class="text-center" id="speedDebug"> Speed Debug</div>
     <div class="text-center" id="videoPositionDebug"> Video Position Debug</div>
     
 
-    <div id="videoContainer">
-      <video autoplay="true" id="videoElement" style="display:none"></video>
-      <canvas id="canvas" width="320" height="240"></canvas>
-      <div class="text-center" id="gestureDebug"> Gesture Debug</div>
-    </div>
+    
     
     <!-- App code -->
     <!-- <script type="text/javascript" src="app/gestures.js"></script> -->
@@ -197,6 +204,8 @@
     <!-- <script>import { FistGesture, OpenPalmGesture } from './gestures.js';</script> -->
 
     <script type="text/javascript" src="app/main.js"></script>
+    <script type="text/javascript" src="app/video.js"></script>
+    <script type="text/javascript" src="app/youtube.js"></script>
     <script type="text/javascript" src="app/setupSpeech.js"></script>
 
   </body>
