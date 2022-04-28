@@ -44,7 +44,6 @@ async function fingerpose(predictions){
     if (predictions.length > 0){
       for (let i = 0; i < predictions.length; i++) {
         const GE = new fp.GestureEstimator([
-          // fp.Gestures.VictoryGesture,
           PointDownGesture,
           FistGesture,
           OpenPalmGesture,
@@ -80,13 +79,7 @@ async function fingerpose(predictions){
             var volume = player.getVolume() - 10;
             player.setVolume(Math.max(Math.min(volume, 100), 0));
           }
-          // if(gesture == lastGesture) {
-          //   console.log("Returned ", gesture.gestures)
-          // }
-          // lastGesture = gesture;
-
         }
       }
-      //////////////////////////////////////////////////////
     }
 }
