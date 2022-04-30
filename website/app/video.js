@@ -40,7 +40,7 @@ const camera = new Camera(videoElement, {
 });
 camera.start();
 
-async function fingerpose(predictions){ 
+async function fingerpose(predictions){
     if (predictions.length > 0){
       for (let i = 0; i < predictions.length; i++) {
         const GE = new fp.GestureEstimator([
@@ -51,7 +51,8 @@ async function fingerpose(predictions){
           PointRightGesture,
           PointUpGesture,
         ]);
-        const gesture = await GE.estimate(predictions[0], 8);
+        const new_prediction = reformat_prediction(predictions[i]);
+        const gesture = await GE.estimate(new_prediction, 8);
         console.log('gesture', gesture);
         if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
           const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 
@@ -82,4 +83,12 @@ async function fingerpose(predictions){
         }
       }
     }
+}
+
+function reformat_prediction(prediction){
+  new_data = [];
+  for (const point of prediction){
+    new_data.push(Object.values(point));
+  }
+  return new_data
 }
