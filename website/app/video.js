@@ -15,8 +15,8 @@ function onResults(results) {
     }
   }
   canvasCtx.restore();
-  fingerpose(results.multiHandLandmarks);
-
+  const hands = getHands(results.multiHandedness);
+  fingerpose(results.multiHandLandmarks, hands);
 }
 
 const hands = new Hands({locateFile: (file) => {
@@ -40,7 +40,8 @@ const camera = new Camera(videoElement, {
 });
 camera.start();
 
-async function fingerpose(predictions){
+async function fingerpose(predictions, hands){
+    let pred_gestures = [];
     if (predictions.length > 0){
       for (let i = 0; i < predictions.length; i++) {
         const GE = new fp.GestureEstimator([
@@ -53,12 +54,14 @@ async function fingerpose(predictions){
         ]);
         const new_prediction = reformat_prediction(predictions[i]);
         const gesture = await GE.estimate(new_prediction, 8);
-        console.log('gesture', gesture);
+        //console.log('gesture', gesture);
+
         if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
           const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 
             return (p.confidence > c.confidence) ? p : c;
           });
-          console.log(maxConfidenceGesture.name)
+          //console.log(maxConfidenceGesture.name)
+          pred_gestures.push(hands[i] + " " + maxConfidenceGesture.name);
           document.getElementById("gestureDebug").innerHTML = "GESTURE DEBUG: " + maxConfidenceGesture.name;
           if (maxConfidenceGesture.name == 'open_palm') {
             player.playVideo();
@@ -83,12 +86,26 @@ async function fingerpose(predictions){
         }
       }
     }
+    console.log(pred_gestures);
 }
 
 function reformat_prediction(prediction){
-  new_data = [];
+  let new_data = [];
   for (const point of prediction){
     new_data.push(Object.values(point));
   }
   return new_data
+}
+
+function getHands(hands_data){
+  let hands = [];
+  for (const hand of hands_data){
+    if (hand['label'] == "Right"){
+      hands.push("Left");
+    }else{
+      hands.push("Right");
+    }
+
+  }
+  return hands;
 }
