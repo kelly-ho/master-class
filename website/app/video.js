@@ -41,7 +41,7 @@ const camera = new Camera(videoElement, {
 camera.start();
 
 async function fingerpose(predictions, hands){
-    let pred_gestures = [];
+    let pred_gestures = {};
     if (predictions.length > 0){
       for (let i = 0; i < predictions.length; i++) {
         const GE = new fp.GestureEstimator([
@@ -60,32 +60,37 @@ async function fingerpose(predictions, hands){
           const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 
             return (p.confidence > c.confidence) ? p : c;
           });
-          //console.log(maxConfidenceGesture.name)
-          pred_gestures.push(hands[i] + " " + maxConfidenceGesture.name);
-          document.getElementById("gestureDebug").innerHTML = "GESTURE DEBUG: " + maxConfidenceGesture.name;
-          if (maxConfidenceGesture.name == 'open_palm') {
-            player.playVideo();
-          }
-          else if (maxConfidenceGesture.name == 'fist') {
-            player.pauseVideo();
-          }
-          else if (maxConfidenceGesture.name == 'point_left') {
-            skip(-10);
-          }
-          else if (maxConfidenceGesture.name == 'point_right') {
-            skip(10);
-          }
-          else if (maxConfidenceGesture.name == 'point_up'){
-            var volume = player.getVolume() + 10;
-            player.setVolume(Math.max(Math.min(volume, 100), 0));
-          }
-          else if (maxConfidenceGesture.name == 'point_down'){
-            var volume = player.getVolume() - 10;
-            player.setVolume(Math.max(Math.min(volume, 100), 0));
-          }
+          pred_gestures[hands[i]] = maxConfidenceGesture.name;
         }
       }
     }
+    if (Object.keys(pred_gestures).length > 0){
+      document.getElementById("gestureDebug").innerHTML = "Gesture: " + gesturesToString(pred_gestures);
+    }else{
+      document.getElementById("gestureDebug").innerHTML = "No hands in frame";
+    }
+
+    if (pred_gestures['Left'] === 'open_palm' && pred_gestures['Right'] === 'open_palm') {
+      var volume = player.getVolume() + 10;
+      player.setVolume(Math.max(Math.min(volume, 100), 0));
+    }
+    else if (isGesture(pred_gestures, 'open_palm')) {
+      player.playVideo();
+    }
+    else if (isGesture(pred_gestures, 'fist')) {
+      player.pauseVideo();
+    }
+    else if (isGesture(pred_gestures, 'point_left')) {
+      skip(-10);
+    }
+    else if (isGesture(pred_gestures, 'point_right')) {
+      skip(10);
+    }
+    else if (isGesture(pred_gestures, 'point_down')){
+      var volume = player.getVolume() - 10;
+      player.setVolume(Math.max(Math.min(volume, 100), 0));
+    }
+
     console.log(pred_gestures);
 }
 
@@ -100,12 +105,27 @@ function reformat_prediction(prediction){
 function getHands(hands_data){
   let hands = [];
   for (const hand of hands_data){
-    if (hand['label'] == "Right"){
+    if (hand['label'] === "Right"){
       hands.push("Left");
     }else{
       hands.push("Right");
     }
-
   }
   return hands;
+}
+
+function isGesture(predictions, gesture){
+  return predictions['Right'] === gesture || predictions['Left'] === gesture;
+}
+
+function gesturesToString(gestures){
+  let str = ""
+  for (const gesture of Object.keys(gestures)){
+    if (gesture === "Right"){
+      str += gestures[gesture] + " (R) ";
+    }else if (gesture === "Left"){
+      str += gestures[gesture] + " (L) ";
+    }
+  }
+  return str;
 }
