@@ -4,6 +4,13 @@ button:focus {outline:0 !important;}
     width: 256px;
     height: 192px;
 }
+
+#videoSubContainer {
+    display: inline-block;
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+}
+
 #videoContainer {
     margin: 0px auto;
     width: 266px;

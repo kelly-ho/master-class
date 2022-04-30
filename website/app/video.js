@@ -10,15 +10,13 @@ function onResults(results) {
   if (results.multiHandLandmarks) {
     for (const landmarks of results.multiHandLandmarks) {
       drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS,
-                     {color: '#00FF00', lineWidth: 5});
+                     {color: '#00FF00', lineWidth: 1});
       drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
     }
   }
   canvasCtx.restore();
-
-  console.log(results);
-  fingerpose(results.multiHandLandmarks);
-
+  const hands = getHands(results.multiHandedness);
+  fingerpose(results.multiHandLandmarks, hands);
 }
 
 const hands = new Hands({locateFile: (file) => {
@@ -28,8 +26,8 @@ console.log("LOADED");
 hands.setOptions({
   maxNumHands: 2,
   modelComplexity: 1,
-  minDetectionConfidence: 0.5,
-  minTrackingConfidence: 0.5
+  minDetectionConfidence: 0.8,
+  minTrackingConfidence: 0.8
 });
 hands.onResults(onResults);
 const model = handpose.load();
@@ -44,14 +42,14 @@ const camera = new Camera(videoElement, {
   width: cameraWidth,
   height: cameraHeight
 });
-// camera.start();
+camera.start();
 
 
-async function fingerpose(predictions){ 
+async function fingerpose(predictions, hands){
+    let pred_gestures = {};
     if (predictions.length > 0){
       for (let i = 0; i < predictions.length; i++) {
         const GE = new fp.GestureEstimator([
-          // fp.Gestures.VictoryGesture,
           PointDownGesture,
           FistGesture,
           OpenPalmGesture,
@@ -59,51 +57,79 @@ async function fingerpose(predictions){
           PointRightGesture,
           PointUpGesture,
         ]);
-        curPrediction = predictions[i]
-        var rescaledPredictions = []
-        for (let j =0; j<21; j++) {
-            rescaledPredictions.push(
-                {'x': curPrediction[j]['x']*cameraWidth, 
-                'y': curPrediction[j]['y']*cameraHeight,
-                'z': curPrediction[j]['z']*cameraWidth}
-            )
-        }
-        console.log(rescaledPredictions)
-        const gesture = await GE.estimate(rescaledPredictions, 8);
-        console.log('gesture', gesture);
+        const new_prediction = reformat_prediction(predictions[i]);
+        const gesture = await GE.estimate(new_prediction, 8);
+
         if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
           const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 
             return (p.confidence > c.confidence) ? p : c;
           });
-          console.log(maxConfidenceGesture.name)
-          document.getElementById("gestureDebug").innerHTML = "GESTURE DEBUG: " + maxConfidenceGesture.name;
-          if (maxConfidenceGesture.name == 'open_palm') {
-            player.playVideo();
-          }
-          else if (maxConfidenceGesture.name == 'fist') {
-            player.pauseVideo();
-          }
-          else if (maxConfidenceGesture.name == 'point_left') {
-            skip(-10);
-          }
-          else if (maxConfidenceGesture.name == 'point_right') {
-            skip(10);
-          }
-          else if (maxConfidenceGesture.name == 'point_up'){
-            var volume = player.getVolume() + 10;
-            player.setVolume(Math.max(Math.min(volume, 100), 0));
-          }
-          else if (maxConfidenceGesture.name == 'point_down'){
-            var volume = player.getVolume() - 10;
-            player.setVolume(Math.max(Math.min(volume, 100), 0));
-          }
-          // if(gesture == lastGesture) {
-          //   console.log("Returned ", gesture.gestures)
-          // }
-          // lastGesture = gesture;
-
+          pred_gestures[hands[i]] = maxConfidenceGesture.name;
         }
       }
-      //////////////////////////////////////////////////////
     }
+    if (Object.keys(pred_gestures).length > 0){
+      document.getElementById("gestureDebug").innerHTML = "Gesture: " + gesturesToString(pred_gestures);
+    }else{
+      document.getElementById("gestureDebug").innerHTML = "No hands in frame";
+    }
+
+    if (pred_gestures['Left'] === 'open_palm' && pred_gestures['Right'] === 'open_palm') {
+      var volume = player.getVolume() + 10;
+      player.setVolume(Math.max(Math.min(volume, 100), 0));
+    }
+    else if (pred_gestures['Left'] === 'fist' && pred_gestures['Right'] === 'fist') {
+      var volume = player.getVolume() - 10;
+      player.setVolume(Math.max(Math.min(volume, 100), 0));
+    }
+    else if (isGesture(pred_gestures, 'open_palm')) {
+      player.playVideo();
+    }
+    else if (isGesture(pred_gestures, 'fist')) {
+      player.pauseVideo();
+    }
+    else if (isGesture(pred_gestures, 'point_left')) {
+      skip(-10);
+    }
+    else if (isGesture(pred_gestures, 'point_right')) {
+      skip(10);
+    }
+
+    console.log(pred_gestures);
+}
+
+function reformat_prediction(prediction){
+  let new_data = [];
+  for (const point of prediction){
+    new_data.push(Object.values(point));
+  }
+  return new_data
+}
+
+function getHands(hands_data){
+  let hands = [];
+  for (const hand of hands_data){
+    if (hand['label'] === "Right"){
+      hands.push("Left");
+    }else{
+      hands.push("Right");
+    }
+  }
+  return hands;
+}
+
+function isGesture(predictions, gesture){
+  return predictions['Right'] === gesture || predictions['Left'] === gesture;
+}
+
+function gesturesToString(gestures){
+  let str = ""
+  for (const gesture of Object.keys(gestures)){
+    if (gesture === "Right"){
+      str += gestures[gesture] + " (R) ";
+    }else if (gesture === "Left"){
+      str += gestures[gesture] + " (L) ";
+    }
+  }
+  return str;
 }
