@@ -18,19 +18,18 @@ recognition.onresult = function(event) {
   for (var i = event.resultIndex; i < event.results.length; ++i) {
     if (event.results[i].isFinal)
       hasFinal = true;
-    else
-      transcript += event.results[i][0].transcript;
+    transcript += event.results[i][0].transcript;
   }
   if (DEBUGSPEECH) {
     if (hasFinal) {
       document.getElementById("speechDebug").innerHTML = "SPEECH DEBUG:";
     }
     else{
-      document.getElementById("speechDebug").innerHTML = "SPEECH DEBUG: " + transcript;
+      document.getElementById("speechDebug").innerHTML = "SPEECH DEBUG: " + transcript.toLowerCase();
     }
   }
 
-  var processed = debouncedProcessSpeech(transcript);
+  var processed = debouncedProcessSpeech(transcript, hasFinal);
 
   // If we reacted to speech, kill recognition and restart
   if (processed) {

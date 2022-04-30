@@ -15,6 +15,8 @@ function onResults(results) {
     }
   }
   canvasCtx.restore();
+
+  console.log(results);
   fingerpose(results.multiHandLandmarks);
 
 }
@@ -25,20 +27,25 @@ const hands = new Hands({locateFile: (file) => {
 console.log("LOADED");
 hands.setOptions({
   maxNumHands: 2,
-  modelComplexity: 0,
+  modelComplexity: 1,
   minDetectionConfidence: 0.5,
   minTrackingConfidence: 0.5
 });
 hands.onResults(onResults);
+const model = handpose.load();
 
+var cameraWidth = 256;
+var cameraHeight = 192;
 const camera = new Camera(videoElement, {
   onFrame: async () => {
     await hands.send({image: videoElement});
+    // model.estimateHands(videoElement).then((prediction, err)=>console.log(prediction));
   },
-  width: 256,
-  height: 192
+  width: cameraWidth,
+  height: cameraHeight
 });
-camera.start();
+// camera.start();
+
 
 async function fingerpose(predictions){ 
     if (predictions.length > 0){
@@ -52,7 +59,17 @@ async function fingerpose(predictions){
           PointRightGesture,
           PointUpGesture,
         ]);
-        const gesture = await GE.estimate(predictions[0], 8);
+        curPrediction = predictions[i]
+        var rescaledPredictions = []
+        for (let j =0; j<21; j++) {
+            rescaledPredictions.push(
+                {'x': curPrediction[j]['x']*cameraWidth, 
+                'y': curPrediction[j]['y']*cameraHeight,
+                'z': curPrediction[j]['z']*cameraWidth}
+            )
+        }
+        console.log(rescaledPredictions)
+        const gesture = await GE.estimate(rescaledPredictions, 8);
         console.log('gesture', gesture);
         if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
           const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 

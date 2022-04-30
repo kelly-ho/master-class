@@ -4,7 +4,7 @@
 //    transcript, a string of possibly multiple words that were recognized
 // Output:
 //    processed, a boolean indicating whether the system reacted to the speech or not
-var processSpeech = function(transcript) {
+var processSpeech = function(transcript, hasFinal) {
   // Helper function to detect if any commands appear in a string
   transcript = transcript.toLowerCase();
   var userSaid = function(str, commands) {
@@ -14,42 +14,141 @@ var processSpeech = function(transcript) {
     }
     return false;
   };
+  var numDict = {"zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17, "eighteen":18, "nineteen": 19, "twenty": 20, "hundred": 100}
+  // Helper function to parse number
+  var parseNumber = function(str, type) {
+    if (str in numDict){ // in case speech recognition fails to convert str into number
+      return numDict[str];
+    }
+    if(type=='float') {
+      return parseFloat(str);
+    }
+    if(type=='int') {
+      return parseInt(str);
+    }
+  };
+  var parseTimeVolumeSpeed = function(str, commands, func) {
+    for (var i = 0; i < commands.length; i++) {
+      const startOfCommandIndex = str.indexOf(commands[i]);
+      if (startOfCommandIndex > -1)
+        var new_str = str.substring(startOfCommandIndex+commands[i].length);
+        if (!new_str) continue;
+        var splitString = new_str.split(/(\s+)/).filter( e => e.trim().length > 0);
+        if (splitString.length == 0) continue;
+        var candidateNumber = splitString[0];
+        if (!isNaN(candidateNumber) || candidateNumber in numDict) { // check if string is numeric and turn into int
+          if (func == 'time') {
+            if (splitString.length <= 1) continue;
+            var timeUnit = splitString[1];
+            if (timeUnit == 'second' || timeUnit == 'seconds') {
+              return parseNumber(candidateNumber, 'int');
+            }
+            else if (timeUnit == 'minute' || timeUnit == 'minutes') {
+              return 60*parseNumber(candidateNumber, 'int');
+            }
+          }
+          else if (func=='speed') {
+            return parseNumber(candidateNumber, 'float');
+          }
+          else if (func == 'volume') {
+            return parseNumber(candidateNumber, 'int');
+          }
+          else if (func == 'jump') {
+            return parseNumber(candidateNumber, 'int');
+          }
+        }
+    }
+    return null;
+  }
+  var volumeCommands = ['masterclass volume', 'masterclass volume to', 
+  'masterclass set volume to', 'masterclass change volume to'];
+  var skipCommands = ['masterclass forward', 'masterclass forwards', 
+  'masterclass forwards by', 'masterclass forward by', 
+  'masterclass go forward', 'masterclass go forward by', 'masterclass skip'];
+  var rewindCommands = ['masterclass backward', 'masterclass backwards', 
+  'masterclass backward by', 'masterclass backwards by', 
+  'masterclass go backward', 'masterclass go backward by', 'masterclass rewind'];
+  var speedCommands = ['masterclass change speed to', 'masterclass set speed to'];
+  var jumpCommands = ['masterclass jump to']
+
   if (userSaid(transcript, ['masterclass play'])) {
-    player.playVideo()
+    player.playVideo();
+    return true;
   }
-  else if (userSaid(transcript, ['masterclass stop', 'masterclass pause'])) {
-    player.pauseVideo()
+  if (userSaid(transcript, ['masterclass stop', 'masterclass pause'])) {
+    player.pauseVideo();
+    return true;
   }
-  else if (userSaid(transcript, ['masterclass restart'])) {
-    player.seekTo(Number('0'), true)
+  if (userSaid(transcript, ['masterclass restart'])) {
+    player.seekTo(Number('0'), true);
+    return true;
   }
-  else if (userSaid(transcript, ['masterclass skip', 'masterclass forward'])) {
-    player.seekTo(player.getCurrentTime()+10, true)
+  if (userSaid(transcript, skipCommands)) {
+    var seconds = parseTimeVolumeSpeed(transcript, skipCommands, 'time');
+    if (seconds !== null) {
+      player.seekTo(player.getCurrentTime()+seconds, true);
+      return true;
+    }
   }
-  else if (userSaid(transcript, ['masterclass rewind', 'masterclass backwards'])) {
-    player.seekTo(player.getCurrentTime()-10, true)
+  if (userSaid(transcript, rewindCommands)) {
+    var seconds = parseTimeVolumeSpeed(transcript, rewindCommands, 'time');
+    if (seconds !== null) {
+      player.seekTo(player.getCurrentTime()-seconds, true);
+      return true;
+    }
   }
-  else if (userSaid(transcript, ['masterclass volume up', 'masterclass louder'])) {
+  if (hasFinal && userSaid(transcript, ['masterclass skip', 'masterclass forward', 'masterclass forwards'])) {
+    player.seekTo(player.getCurrentTime()+10, true);
+    return true;
+  }
+  if (hasFinal && userSaid(transcript, ['masterclass rewind', 'masterclass backward', 'masterclass backwards'])) {
+    player.seekTo(player.getCurrentTime()-10, true);
+    return true;
+  }
+  if (userSaid(transcript, volumeCommands)) {
+    var volume = parseTimeVolumeSpeed(transcript, volumeCommands, 'volume');
+    if (volume !== null) {
+      player.setVolume(Math.max(Math.min(volume, 100), 0));
+      return true; 
+    }
+  }
+  if (hasFinal && userSaid(transcript, ['masterclass volume up', 'masterclass louder'])) {
     var volume = player.getVolume() + 10;
     player.setVolume(Math.max(Math.min(volume, 100), 0));
+    return true;
   }
-  else if (userSaid(transcript, ['masterclass volume down', 'masterclass quieter'])) {
+  if (hasFinal && userSaid(transcript, ['masterclass volume down', 'masterclass quieter'])) {
     var volume = player.getVolume() - 10;
     player.setVolume(Math.max(Math.min(volume, 100), 0));
+    return true;
   }
-  else if (userSaid(transcript, ['masterclass mute', 'masterclass volume off'])) {
+  if (userSaid(transcript, ['masterclass mute', 'masterclass volume off'])) {
     player.mute();
+    return true;
   }
-  else if (userSaid(transcript, ['masterclass unmute', 'masterclass volume on'])) {
+  if (userSaid(transcript, ['masterclass unmute', 'masterclass volume on'])) {
     player.unMute();
+    return true;
   }
-  else if (userSaid(transcript, ['masterclass speed up', 'masterclass increase speed'])) {
+  if (userSaid(transcript, speedCommands)) {
+    var speed = parseTimeVolumeSpeed(transcript, speedCommands, 'speed');
+    if (speed !== null) {
+      player.setPlaybackRate(speed); // will be between 0.25 to 2
+      return true;
+    }
+  }
+
+  if (userSaid(transcript, ['masterclass speed up', 'masterclass increase speed'])) {
     increaseSpeed();
+    return true;
   }
-  else if (userSaid(transcript, ['masterclass slow down', 'masterclass decrease speed'])) {
-    decreaseSpeed()
+  if (userSaid(transcript, ['masterclass slow down', 'masterclass decrease speed'])) {
+    decreaseSpeed();
+    return true;
   }
+  
 };
+
 
 const FistGesture = new fp.GestureDescription('fist'); // ✊️
 const OpenPalmGesture = new fp.GestureDescription('open_palm'); // 🖐
@@ -168,154 +267,3 @@ const style = {
   15: { color: "gold", size: 6 },16: { color: "gold", size: 6 },17: { color: "orange", size: 10 },18: { color: "gold", size: 6 },
   19: { color: "gold", size: 6 },20: { color: "gold", size: 6 },
 };
-
-// const drawHand = (predictions, ctx) => {
-//   // Check if we have predictions
-//   if (predictions.length > 0) {
-//     // Loop through each prediction
-//     predictions.forEach((prediction) => {
-//       // Grab landmarks
-//       const landmarks = prediction.landmarks;
-//       console.log(landmarks)
-//       // Loop through fingers
-//       for (let j = 0; j < Object.keys(fingerJoints).length; j++) {
-//         let finger = Object.keys(fingerJoints)[j];
-//         //  Loop through pairs of joints
-//         for (let k = 0; k < fingerJoints[finger].length - 1; k++) {
-//           // Get pairs of joints
-//           const firstJointIndex = fingerJoints[finger][k];
-//           const secondJointIndex = fingerJoints[finger][k + 1];
-
-//           // Draw path
-//           ctx.beginPath();
-//           ctx.moveTo(
-//               landmarks[firstJointIndex][0]/2,
-//               landmarks[firstJointIndex][1]/2,
-//           );
-//           ctx.lineTo(
-//               landmarks[secondJointIndex][0]/2,
-//               landmarks[secondJointIndex][1]/2
-//           );
-//           ctx.strokeStyle = "plum";
-//           ctx.lineWidth = 2;
-//           ctx.stroke();
-//         }
-//       }
-
-//       // Loop through landmarks and draw em
-//       for (let i = 0; i < landmarks.length; i++) {
-//         // Get x point
-//         const x = landmarks[i][0]/2;
-//         // Get y point
-//         const y = landmarks[i][1]/2;
-//         // Start drawing
-//         ctx.beginPath();
-//         ctx.arc(x, y, style[i]["size"], 0, 3 * Math.PI);
-//         // Set line color
-//         ctx.fillStyle = style[i]["color"];
-//         ctx.fill();
-//       }
-//     });
-//   }
-// };
-
-// /////////////////////////////////////////////////////////////////////
-// (function() {
-//   var canvas = document.getElementById('canvas');
-//   var context = canvas.getContext('2d');
-//   var video = document.getElementById('videoElement');
-//   /////////////////////////////////////////////////////////////////
-//   if (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia) {
-//     navigator.mediaDevices.getUserMedia({ video: true,
-//       audio:false })
-//         .then(function (stream) {
-//           video.srcObject = stream;
-//         })
-//         .catch(function (err) {
-//           console.log("Something went wrong!");
-//         });
-//   }
-//   ///////////////////////////////////////////////////////////////
-//   video.addEventListener('play',function()
-//   {
-//     draw(this, context,320,240);
-//   },false);
-//   ///////////////////////////////////////////////////////////////
-
-//   let lastGesture = "";
-//   async function draw(video,context, width, height){
-//     context.drawImage(video,0,0,width,height);
-//     const model = await handpose.load();
-
-//     const predictions = await model.estimateHands(video);
-//     document.getElementById("speedDebug").innerHTML = "SPEED DEBUG: " +  player.getPlaybackRate();
-//     var date = new Date(0);
-//     date.setSeconds(player.getCurrentTime()); // specify value for SECONDS here
-//     var timeString = date.toISOString().substr(11, 8);
-//     document.getElementById("videoPositionDebug").innerHTML = "Video Position Debug: " + timeString;
-//     document.getElementById("volumeDebug").innerHTML = "VOLUME DEBUG: " + player.getVolume();
-  
-//     // console.log(predictions);
-//     ///////////////////////////////////////////////////////////
-//     if (predictions.length > 0){
-//       for (let i = 0; i < predictions.length; i++) {
-//         drawHand(predictions,context);
-
-//         var probability = predictions[i].handInViewConfidence;
-//         var prob = (probability*100).toPrecision(5).toString();
-//         var text = "Confidence:"+prob+"%";
-//         context.font = "16pt Comic Sans MS";
-//         context.fillStyle = "#FF0000";
-//         context.fillText(text,425,20);
-//         const GE = new fp.GestureEstimator([
-//           // fp.Gestures.VictoryGesture,
-//           PointDownGesture,
-//           FistGesture,
-//           OpenPalmGesture,
-//           PointLeftGesture,
-//           PointRightGesture,
-//           PointUpGesture,
-//         ]);
-//         const gesture = await GE.estimate(predictions[0].landmarks, 8);
-//         console.log('gesture', gesture);
-//         if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
-//           const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 
-//             return (p.confidence > c.confidence) ? p : c;
-//           });
-//           console.log(maxConfidenceGesture.name)
-//           document.getElementById("gestureDebug").innerHTML = "GESTURE DEBUG: " + maxConfidenceGesture.name;
-//           if (maxConfidenceGesture.name == 'open_palm') {
-//             player.playVideo();
-//           }
-//           else if (maxConfidenceGesture.name == 'fist') {
-//             player.pauseVideo();
-//           }
-//           else if (maxConfidenceGesture.name == 'point_left') {
-//             skip(-10);
-//           }
-//           else if (maxConfidenceGesture.name == 'point_right') {
-//             skip(10);
-//           }
-//           else if (maxConfidenceGesture.name == 'point_up'){
-//             var volume = player.getVolume() + 10;
-//             player.setVolume(Math.max(Math.min(volume, 100), 0));
-//           }
-//           else if (maxConfidenceGesture.name == 'point_down'){
-//             var volume = player.getVolume() - 10;
-//             player.setVolume(Math.max(Math.min(volume, 100), 0));
-//           }
-//           // if(gesture == lastGesture) {
-//           //   console.log("Returned ", gesture.gestures)
-//           // }
-//           // lastGesture = gesture;
-
-//         }
-//       }
-//       //////////////////////////////////////////////////////
-//     }
-//     setTimeout(draw,100,video,context,width,height);
-//     /////////////////////////////////////////////////////////
-//   }
-// })();
-
-
