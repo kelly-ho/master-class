@@ -10,7 +10,7 @@ function onResults(results) {
   if (results.multiHandLandmarks) {
     for (const landmarks of results.multiHandLandmarks) {
       drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS,
-                     {color: '#00FF00', lineWidth: 5});
+                     {color: '#00FF00', lineWidth: 1});
       drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
     }
   }
@@ -54,7 +54,6 @@ async function fingerpose(predictions, hands){
         ]);
         const new_prediction = reformat_prediction(predictions[i]);
         const gesture = await GE.estimate(new_prediction, 8);
-        //console.log('gesture', gesture);
 
         if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
           const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 
@@ -74,6 +73,10 @@ async function fingerpose(predictions, hands){
       var volume = player.getVolume() + 10;
       player.setVolume(Math.max(Math.min(volume, 100), 0));
     }
+    else if (pred_gestures['Left'] === 'fist' && pred_gestures['Right'] === 'fist') {
+      var volume = player.getVolume() - 10;
+      player.setVolume(Math.max(Math.min(volume, 100), 0));
+    }
     else if (isGesture(pred_gestures, 'open_palm')) {
       player.playVideo();
     }
@@ -85,10 +88,6 @@ async function fingerpose(predictions, hands){
     }
     else if (isGesture(pred_gestures, 'point_right')) {
       skip(10);
-    }
-    else if (isGesture(pred_gestures, 'point_down')){
-      var volume = player.getVolume() - 10;
-      player.setVolume(Math.max(Math.min(volume, 100), 0));
     }
 
     console.log(pred_gestures);

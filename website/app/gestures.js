@@ -6,7 +6,6 @@ const PointRightGesture = new fp.GestureDescription('point_right'); // 🖐
 const PointUpGesture = new fp.GestureDescription('point_up');
 const PointDownGesture = new fp.GestureDescription('point_down');
 
-
 // Fist
 // -----------------------------------------------------------------------------
 
@@ -64,19 +63,78 @@ for(let finger of [fp.Finger.Middle, fp.Finger.Ring, fp.Finger.Pinky]) {
 
 // Point up
 // -----------------------------------------------------------------------------
-for(let finger of [fp.Finger.Pointer, fp.Finger.Middle]) {
-    PointUpGesture.addCurl(finger, fp.FingerCurl.NoCurl, 1.0);
-    PointUpGesture.addDirection(finger, fp.FingerDirection.VerticalUp, 1.3);
-
-}
-for(let finger of [fp.Finger.Thumb, fp.Finger.Ring, fp.Finger.Pinky]) {
+PointUpGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.DiagonalUpLeft, 1.0);
+PointUpGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.DiagonalUpRight, 1.0);
+PointUpGesture.addDirection(fp.Finger.Thumb, fp.FingerDirection.VerticalUp, 1.0);
+PointUpGesture.addCurl(fp.Finger.Pointer, fp.FingerCurl.NoCurl, 1.5);
+PointUpGesture.addDirection(fp.Finger.Pointer, fp.FingerDirection.VerticalUp, 1.5);
+for(let finger of [fp.Finger.Middle, fp.Finger.Ring, fp.Finger.Pinky]) {
     PointUpGesture.addCurl(finger, fp.FingerCurl.FullCurl, 1.0);
     PointUpGesture.addCurl(finger, fp.FingerCurl.HalfCurl, 1.0);
-    PointUpGesture.addDirection(finger, fp.FingerDirection.VerticalUp, 1.0);
-    PointUpGesture.addDirection(finger, fp.FingerDirection.DiagonalUpLeft, 0.5);
-    PointUpGesture.addDirection(finger, fp.FingerDirection.DiagonalUpRight, 0.5);
+    PointUpGesture.addDirection(finger, fp.FingerDirection.HorizontalLeft, 0.9);
+    PointUpGesture.addDirection(finger, fp.FingerDirection.HorizontalRight, 0.9);
+    PointUpGesture.addDirection(finger, fp.FingerDirection.DiagonalUpLeft, 0.9);
+    PointUpGesture.addDirection(finger, fp.FingerDirection.DiagonalUpRight, 0.9);
 
 }
+
+/*
+[
+    [
+        "Thumb",
+        "No Curl",
+        "Diagonal Up Right"
+    ],
+    [
+        "Index",
+        "No Curl",
+        "Vertical Up"
+    ],
+    [
+        "Middle",
+        "Half Curl",
+        "Diagonal Up Right"
+    ],
+    [
+        "Ring",
+        "Half Curl",
+        "Diagonal Up Right"
+    ],
+    [
+        "Pinky",
+        "Half Curl",
+        "Horizontal Right"
+    ]
+]
+
+[
+    [
+        "Thumb",
+        "No Curl",
+        "Diagonal Up Left"
+    ],
+    [
+        "Index",
+        "No Curl",
+        "Vertical Up"
+    ],
+    [
+        "Middle",
+        "Full Curl",
+        "Diagonal Up Left"
+    ],
+    [
+        "Ring",
+        "Full Curl",
+        "Diagonal Up Left"
+    ],
+    [
+        "Pinky",
+        "Half Curl",
+        "Diagonal Up Left"
+    ]
+]
+ */
 
 // Point down
 // -----------------------------------------------------------------------------
