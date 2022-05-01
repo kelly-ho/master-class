@@ -36,6 +36,7 @@ var processSpeech = function(transcript, hasFinal) {
         var splitString = new_str.split(/(\s+)/).filter( e => e.trim().length > 0);
         if (splitString.length == 0) continue;
         var candidateNumber = splitString[0];
+        candidateNumber = candidateNumber.replace(":", "");
         if (!isNaN(candidateNumber) || candidateNumber in numDict) { // check if string is numeric and turn into int
           if (func == 'time') {
             if (splitString.length <= 1) continue;
@@ -69,7 +70,7 @@ var processSpeech = function(transcript, hasFinal) {
   'masterclass backward by', 'masterclass backwards by', 
   'masterclass go backward', 'masterclass go backward by', 'masterclass rewind'];
   var speedCommands = ['masterclass change speed to', 'masterclass set speed to'];
-  var jumpCommands = ['masterclass jump to']
+  var jumpCommands = ['masterclass jump to', 'masterclass go to']
 
   if (userSaid(transcript, ['masterclass play'])) {
     player.playVideo();
@@ -82,6 +83,14 @@ var processSpeech = function(transcript, hasFinal) {
   if (userSaid(transcript, ['masterclass restart'])) {
     player.seekTo(Number('0'), true);
     return true;
+  }
+  if (userSaid(transcript, jumpCommands)) {
+    var time = parseTimeVolumeSpeed(transcript, jumpCommands, 'jump');
+    if (time !== null && (0 <= time < 60 ||  1000 <=time < 6000)) {
+      time = time%100 + Math.floor(time/100)*60;
+      player.seekTo(time, true);
+      return true;
+    }
   }
   if (userSaid(transcript, skipCommands)) {
     var seconds = parseTimeVolumeSpeed(transcript, skipCommands, 'time');
