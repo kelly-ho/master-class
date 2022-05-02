@@ -46,6 +46,24 @@
   <body>
     <h1 class="text-center mt-5">MasterClass</h1>
 
+    
+    <div class="input-group mx-auto mt-2 mb-5" style="width: 50%">
+      <input type="search" class="form-control form-control-lg rounded" placeholder="Paste Youtube Link" aria-label="Search" aria-describedby="search-addon" />
+      <button type="submit" class="btn btn-outline-primary btn-lg" onClick="javascript:openUrl(this)">search</button>
+    </div>
+    <div class="text-center"> <div id="player"></div></div>
+    <div id="videoContainer">
+      <div id="videoSubContainer">
+        <video autoplay="true" class="videoElement" style="display:none"></video>
+        <canvas class="canvas" width="256" height="192"></canvas>
+      </div>
+      <div class="text-center" id="gestureDebug"> Gesture Debug</div>
+    </div>
+    <div class="text-center" id="speechDebug"> Speech Debug</div>
+    <div class="text-center" id="volumeDebug"> Volume Debug</div>
+    <div class="text-center" id="speedDebug"> Speed Debug</div>
+    <div class="text-center" id="videoPositionDebug"> Video Position Debug</div>
+    
     <h3 class="text-center mt-5">Instructions</h3>
     <div class="mx-auto mb-5" id="accordion" style="width: 50%">
       <div class="card">
@@ -64,7 +82,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col">Voice Command</th>
+                  <th scope="col">Simple Voice Commands</th>
                   <th scope="col">Video Action</th>
                 </tr>
               </thead>
@@ -96,6 +114,44 @@
                 <tr>
                   <td>masterclass volume down <i>or</i> masterclass quieter</td>
                   <td>Decrease the volume by 10%</td>
+                </tr>
+                <tr>
+                  <td>masterclass increase speed <i>or</i> masterclass speed up</td>
+                  <td>Increase the speed by 0.25</td>
+                </tr>
+                <tr>
+                  <td>masterclass decrease speed <i>or</i> masterclass slow down  </td>
+                  <td>Decrease the speed by 0.25</td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Complex Voice Command</th>
+                  <th scope="col">Video Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>masterclass jump/go to <i>mm:ss</i> (eg. 10:54)</td>
+                  <td>Go to timestamp <i>mm:ss</i></td>
+                </tr>
+                <tr>
+                  <td>masterclass skip/forward <i>x</i> seconds/minutes</td>
+                  <td>Skip ahead by <i>x</i> seconds/minutes</td>
+                </tr>
+                <tr>
+                  <td>masterclass rewind/backwards by <i>x</i> seconds/minutes</td>
+                  <td>Rewind by <i>x</i> seconds/minutes</td>
+                </tr>
+                <tr>
+                  <td>masterclass change/set volume to <i>x</i></td>
+                  <td>Change volume to <i>x</i></td>
+                </tr>
+                <tr>
+                  <td>masterclass change/set speed to <i>x</i></td>
+                  <td>Change speed to <i>x</i></td>
                 </tr>
               </tbody>
             </table>
@@ -171,24 +227,6 @@
         </div>
       </div>
     </div>
-
-    <div class="input-group mx-auto mt-2 mb-5" style="width: 50%">
-      <input type="search" class="form-control form-control-lg rounded" placeholder="Paste Youtube Link" aria-label="Search" aria-describedby="search-addon" />
-      <button type="submit" class="btn btn-outline-primary btn-lg" onClick="javascript:openUrl(this)">search</button>
-    </div>
-    <div class="text-center"> <div id="player"></div></div>
-    <div id="videoContainer">
-      <div id="videoSubContainer">
-        <video autoplay="true" class="videoElement" style="display:none"></video>
-        <canvas class="canvas" width="256" height="192"></canvas>
-      </div>
-      <div class="text-center" id="gestureDebug"> Gesture Debug</div>
-    </div>
-    <div class="text-center" id="speechDebug"> Speech Debug</div>
-    <div class="text-center" id="volumeDebug"> Volume Debug</div>
-    <div class="text-center" id="speedDebug"> Speed Debug</div>
-    <div class="text-center" id="videoPositionDebug"> Video Position Debug</div>
-    
 
     <!-- App code -->
     <!-- <script type="text/javascript" src="app/gestures.js"></script> -->

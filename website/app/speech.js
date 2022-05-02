@@ -61,8 +61,7 @@ var processSpeech = function(transcript, hasFinal) {
     }
     return null;
   }
-  var volumeCommands = ['masterclass volume', 'masterclass volume to', 
-  'masterclass set volume to', 'masterclass change volume to'];
+  var volumeCommands = ['masterclass set volume to', 'masterclass change volume to'];
   var skipCommands = ['masterclass forward', 'masterclass forwards', 
   'masterclass forwards by', 'masterclass forward by', 
   'masterclass go forward', 'masterclass go forward by', 'masterclass skip'];
