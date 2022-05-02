@@ -55,10 +55,13 @@ async function fingerpose(predictions, hands){
           OpenPalmGesture,
           PointLeftGesture,
           PointRightGesture,
+          ThumbsUpGesture,
+          ThumbsDownGesture,
           PointUpGesture,
         ]);
         const new_prediction = reformat_prediction(predictions[i]);
         const gesture = await GE.estimate(new_prediction, 8);
+        console.log(gesture);
 
         if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
           const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 
@@ -81,6 +84,12 @@ async function fingerpose(predictions, hands){
     else if (pred_gestures['Left'] === 'fist' && pred_gestures['Right'] === 'fist') {
       var volume = player.getVolume() - 10;
       player.setVolume(Math.max(Math.min(volume, 100), 0));
+    }
+    else if (isGesture(pred_gestures, 'thumbs_up')) {
+      increaseSpeed();
+    }
+    else if (isGesture(pred_gestures, 'thumbs_down')) {
+        decreaseSpeed();
     }
     else if (isGesture(pred_gestures, 'open_palm')) {
       player.playVideo();
