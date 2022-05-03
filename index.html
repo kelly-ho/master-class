@@ -44,12 +44,12 @@
     
   </head>
   <body>
-    <h1 class="text-center mt-5">MasterClass</h1>
+    <h2 class="text-center mt-5">MasterClass</h2>
 
     
-    <div class="input-group mx-auto mt-2 mb-5" style="width: 50%">
-      <input type="search" class="form-control form-control-lg rounded" placeholder="Paste Youtube Link" aria-label="Search" aria-describedby="search-addon" />
-      <button type="submit" class="btn btn-outline-primary btn-lg" onClick="javascript:openUrl(this)">search</button>
+    <div class="input-group mx-auto mt-3 mb-4" style="width: 50%">
+      <input type="search" class="form-control form-control rounded" placeholder="Paste Youtube Link" aria-label="Search" aria-describedby="search-addon" />
+      <button type="submit" class="btn btn-outline-primary btn" onClick="javascript:openUrl(this)">search</button>
     </div>
     <div class="text-center"> <div id="player"></div></div>
     <div id="videoContainer">
@@ -60,11 +60,8 @@
       <div class="text-center" id="gestureDebug">Gesture: No hands in frame</div>
     </div>
     <div class="text-center" id="speechDebug">Speech: </div>
-    <div class="text-center" id="volumeDebug"> Volume Debug</div>
-    <div class="text-center" id="speedDebug"> Speed Debug</div>
-    <div class="text-center" id="videoPositionDebug"> Video Position Debug</div>
-    
-    <h3 class="text-center mt-5">Instructions</h3>
+
+    <h3 class="text-center mt-4">Instructions</h3>
     <div class="mx-auto mb-5" id="accordion" style="width: 50%">
       <div class="card">
         <div class="card-header" id="headingOne">
@@ -74,10 +71,10 @@
             </button>
           </h5>
         </div>
-    
+
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
           <div class="card-body">
-            Use the following commands to control the video. 
+            Use the following commands to control the video.
             <span></span>
             <table class="table">
               <thead>
@@ -170,24 +167,24 @@
           <div class="card-body">
             <div>
               <div class="row">
-                <img class="fit-picture col-md-4" src="/img/open_palm.png">
-                <img class="fit-picture col-md-4" src="/img/fist.png">
-                <img class="fit-picture col-md-4" src="/img/point_right.png">
-                <img class="fit-picture col-md-4" src="/img/point_left.png">
+                <img class="fit-picture col-md-3" src="/img/open_palm.png">
+                <img class="fit-picture col-md-3" src="/img/fist.png">
+                <img class="fit-picture col-md-3" src="/img/point_right.png">
+                <img class="fit-picture col-md-3" src="/img/point_left.png">
               </div>
               <div>
                 <br>
-                <p>From left to right the gestures represent: start, stop, and skip forward.</p>
+                <p>From left to right the gestures represent: start, stop, and skip forward, rewind.</p>
               </div>
               <div class="row">
-                <img class="fit-picture col-md-4" src="/img/double_open_palm.png">
-                <img class="fit-picture col-md-4" src="/img/double_fist.png">
-                <img class="fit-picture col-md-4" src="/img/point_up.png">
-                <img class="fit-picture col-md-4" src="/img/point_down.png">
+                <img class="fit-picture col-md-3" src="/img/double_open_palm.png">
+                <img class="fit-picture col-md-3" src="/img/double_fist.png">
+                <img class="fit-picture col-md-3" src="/img/thumbs_up.png">
+                <img class="fit-picture col-md-3" src="/img/thumbs_down.png">
               </div>
               <div>
                 <br>
-                <p>From left to right the gestures represent: rewind, volume up, and volume down.</p>
+                <p>From left to right the gestures represent: volume up, volume down, speed up, and slow down.</p>
               </div>
             </div>
 
@@ -216,11 +213,19 @@
                   <td>Rewind by 10 seconds</td>
                 </tr>
                 <tr>
-                  <td>Point up with two fingers</td>
+                  <td>Two open palms</td>
+                  <td>Increase the speed by 0.25x</td>
+                </tr>
+                <tr>
+                  <td>Two fists</td>
+                  <td>Decrease the speed by 0.25x</td>
+                </tr>
+                <tr>
+                  <td>Thumbs up </td>
                   <td>Increase the volume by 10%</td>
                 </tr>
                 <tr>
-                  <td>Point down with two fingers</td>
+                  <td>Thumbs down</td>
                   <td>Decrease the volume by 10%</td>
                 </tr>
               </tbody>

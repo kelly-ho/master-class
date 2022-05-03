@@ -76,7 +76,7 @@ async function fingerpose(predictions, hands){
         }
       }
     }
-    if (Object.keys(pred_gestures).length > 0){
+    if (pred_gestures['Right'].length > 0 || pred_gestures['Left'].length > 0){
       document.getElementById("gestureDebug").innerHTML = "Gesture: " + gesturesToString(pred_gestures);
     }else{
       document.getElementById("gestureDebug").innerHTML = "Gesture: No hands in frame";
@@ -122,12 +122,14 @@ async function fingerpose(predictions, hands){
             skip(10);
         }
         gestureDuration = 0;
+        /*
         if (pred_gestures["Left"].length > 0 || pred_gestures["Right"].length > 0){
             console.log("command activated");
         }
+         */
     }
     //console.log(pred_gestures);
-    console.log("hit");
+    //console.log("hit");
 }
 
 function reformat_prediction(prediction){

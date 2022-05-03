@@ -17,7 +17,6 @@ button:focus {outline:0 !important;}
     height: 202px;
     border: 5px #333 solid;
     position: fixed;
-    right: 2.5%;
+    right: .75%;
     top: 35%;
 }
-

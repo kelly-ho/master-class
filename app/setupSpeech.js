@@ -22,10 +22,10 @@ recognition.onresult = function(event) {
   }
   if (DEBUGSPEECH) {
     if (hasFinal) {
-      document.getElementById("speechDebug").innerHTML = "SPEECH DEBUG:";
+      document.getElementById("speechDebug").innerHTML = "Speech:";
     }
     else{
-      document.getElementById("speechDebug").innerHTML = "SPEECH DEBUG: " + transcript.toLowerCase();
+      document.getElementById("speechDebug").innerHTML = "Speech: " + transcript.toLowerCase();
     }
   }
 
