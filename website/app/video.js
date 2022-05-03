@@ -44,9 +44,14 @@ const camera = new Camera(videoElement, {
 });
 camera.start();
 
+let lastGestureLeft = "";
+let lastGestureRight = "";
+let gestureDuration = 0;
+const requiredDuration = 500;
+let predictionStartTS = Date.now();
 
 async function fingerpose(predictions, hands){
-    let pred_gestures = {};
+    let pred_gestures = {'Right': "", 'Left': ""};
     if (predictions.length > 0){
       for (let i = 0; i < predictions.length; i++) {
         const GE = new fp.GestureEstimator([
@@ -61,7 +66,7 @@ async function fingerpose(predictions, hands){
         ]);
         const new_prediction = reformat_prediction(predictions[i]);
         const gesture = await GE.estimate(new_prediction, 8);
-        console.log(gesture);
+        //console.log(gesture);
 
         if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
           const maxConfidenceGesture = gesture.gestures.reduce((p, c) => { 
@@ -77,34 +82,52 @@ async function fingerpose(predictions, hands){
       document.getElementById("gestureDebug").innerHTML = "No hands in frame";
     }
 
-    if (pred_gestures['Left'] === 'open_palm' && pred_gestures['Right'] === 'open_palm') {
-      var volume = player.getVolume() + 10;
-      player.setVolume(Math.max(Math.min(volume, 100), 0));
+    if(pred_gestures["Left"] === lastGestureLeft && pred_gestures["Right"] === lastGestureRight) {
+        const deltaTime = Date.now() - predictionStartTS;
+        gestureDuration += deltaTime;
     }
-    else if (pred_gestures['Left'] === 'fist' && pred_gestures['Right'] === 'fist') {
-      var volume = player.getVolume() - 10;
-      player.setVolume(Math.max(Math.min(volume, 100), 0));
+    else {
+        //UI.setPlayerHand(playerGesture);
+        lastGestureLeft = pred_gestures["Left"];
+        lastGestureRight = pred_gestures["Right"];
+        gestureDuration = 0;
     }
-    else if (isGesture(pred_gestures, 'thumbs_up')) {
-      increaseSpeed();
-    }
-    else if (isGesture(pred_gestures, 'thumbs_down')) {
-        decreaseSpeed();
-    }
-    else if (isGesture(pred_gestures, 'open_palm')) {
-      player.playVideo();
-    }
-    else if (isGesture(pred_gestures, 'fist')) {
-      player.pauseVideo();
-    }
-    else if (isGesture(pred_gestures, 'point_left')) {
-      skip(-10);
-    }
-    else if (isGesture(pred_gestures, 'point_right')) {
-      skip(10);
-    }
+    predictionStartTS = Date.now();
 
-    console.log(pred_gestures);
+    if(gestureDuration > requiredDuration) {
+        if (pred_gestures['Left'] === 'open_palm' && pred_gestures['Right'] === 'open_palm') {
+            var volume = player.getVolume() + 10;
+            player.setVolume(Math.max(Math.min(volume, 100), 0));
+        }
+        else if (pred_gestures['Left'] === 'fist' && pred_gestures['Right'] === 'fist') {
+            var volume = player.getVolume() - 10;
+            player.setVolume(Math.max(Math.min(volume, 100), 0));
+        }
+        else if (isGesture(pred_gestures, 'thumbs_up')) {
+            increaseSpeed();
+        }
+        else if (isGesture(pred_gestures, 'thumbs_down')) {
+            decreaseSpeed();
+        }
+        else if (isGesture(pred_gestures, 'open_palm')) {
+            player.playVideo();
+        }
+        else if (isGesture(pred_gestures, 'fist')) {
+            player.pauseVideo();
+        }
+        else if (isGesture(pred_gestures, 'point_left')) {
+            skip(-10);
+        }
+        else if (isGesture(pred_gestures, 'point_right')) {
+            skip(10);
+        }
+        gestureDuration = 0;
+        if (pred_gestures["Left"].length > 0 || pred_gestures["Right"].length > 0){
+            console.log("command activated");
+        }
+    }
+    //console.log(pred_gestures);
+    console.log("hit");
 }
 
 function reformat_prediction(prediction){
@@ -134,7 +157,9 @@ function isGesture(predictions, gesture){
 function gesturesToString(gestures){
   let str = ""
   for (const gesture of Object.keys(gestures)){
-    if (gesture === "Right"){
+    if (gestures[gesture].length === 0){
+      continue;
+    } else if (gesture === "Right"){
       str += gestures[gesture] + " (R) ";
     }else if (gesture === "Left"){
       str += gestures[gesture] + " (L) ";
