@@ -51,15 +51,25 @@
       <input type="search" class="form-control form-control rounded" placeholder="Paste Youtube Link" aria-label="Search" aria-describedby="search-addon" />
       <button type="submit" class="btn btn-outline-primary btn" onClick="javascript:openUrl(this)">search</button>
     </div>
-    <div class="text-center"> <div id="player"></div></div>
-    <div id="videoContainer">
-      <div id="videoSubContainer">
-        <video autoplay="true" class="videoElement" style="display:none"></video>
-        <canvas class="canvas" width="256" height="192"></canvas>
+   
+    <div id="videoRow">
+      <div id="invisibleVideoContainer">
       </div>
-      <div class="text-center" id="gestureDebug">Gesture: No hands in frame</div>
+      <div id="youtubeVideo">
+        <div class="text-center"> <div id="player"></div></div>
+        <div class="text-center" id="speechDebug">Speech: </div>
+      </div>
+      <div id="videoContainer">
+        <button class="btn btn-light" onclick="$('#videoSubContainer').toggle();">
+          Toggle Webcam
+        </button>
+        <div id="videoSubContainer">
+          <video autoplay="true" class="videoElement" style="display:none"></video>
+          <canvas class="canvas" width="256" height="192"></canvas>
+        </div>
+        <div id="gestureDebug">Gesture: No hands in frame</div>
+      </div>
     </div>
-    <div class="text-center" id="speechDebug">Speech: </div>
 
     <h3 class="text-center mt-4">Instructions</h3>
     <div class="mx-auto mb-5" id="accordion" style="width: 50%">

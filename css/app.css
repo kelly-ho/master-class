@@ -9,14 +9,34 @@ button:focus {outline:0 !important;}
     display: inline-block;
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
+    border: 3px #333 solid;
+    margin-top: 5px;
+    /* width: 266px; */
+    height: 198px;
 }
 
 #videoContainer {
     margin: 0px auto;
+    /* margin-left:auto; */
     width: 266px;
-    height: 202px;
-    border: 5px #333 solid;
-    position: fixed;
-    right: .75%;
-    top: 35%;
+    /* height: 202px; */
+    /* border: 5px #333 solid; */
+    /* position: relative; */
+    /* right: -20%; */
+    /* top: 35%; */ */
+}
+#invisibleVideoContainer {
+    display: flex;
+    width: 266px;
+    height: 204px;
+    margin-right: auto;
+    visibility: hidden;
+}
+#videoRow {
+    display:flex;
+    justify-content:center;
+}
+#youtubeVideo {
+    margin-left:auto;
+    
 }
