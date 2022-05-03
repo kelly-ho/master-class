@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>MasterClass</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="lib/famous.css" />
+    <link rel="stylesheet" type="text/css" href="css/app.css" />
+    <link rel="shortcut icon" href="#">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+
+    <!-- Famo.us -->
+    <script type="text/javascript" src="lib/famous.min.js"></script>
+
+    <!-- Underscore/Backbone -->
+    <script type="text/javascript" src="lib/underscore.min.js"></script>
+    <script type="text/javascript" src="lib/backbone.min.js"></script>
+
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/@tensorflow/tfjs-core@2.1.0/dist/tf-core.js"></script>
+    <script src="https://unpkg.com/@tensorflow/tfjs-converter@2.1.0/dist/tf-converter.js"></script>
+
+    <!-- TF.js backend -->
+    <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@2.1.0/dist/tf-backend-webgl.js"></script>
+    <script src="https://unpkg.com/@tensorflow-models/handpose@0.0.6/dist/handpose.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://unpkg.com/fingerpose@0.0.2/dist/fingerpose.js"></script>
+    
+  </head>
+  <body>
+    <h1 class="text-center mt-5">MasterClass</h1>
+
+    
+    <div class="input-group mx-auto mt-2 mb-5" style="width: 50%">
+      <input type="search" class="form-control form-control-lg rounded" placeholder="Paste Youtube Link" aria-label="Search" aria-describedby="search-addon" />
+      <button type="submit" class="btn btn-outline-primary btn-lg" onClick="javascript:openUrl(this)">search</button>
+    </div>
+    <div class="text-center"> <div id="player"></div></div>
+    <div id="videoContainer">
+      <div id="videoSubContainer">
+        <video autoplay="true" class="videoElement" style="display:none"></video>
+        <canvas class="canvas" width="256" height="192"></canvas>
+      </div>
+      <div class="text-center" id="gestureDebug">Gesture: No hands in frame</div>
+    </div>
+    <div class="text-center" id="speechDebug">Speech: </div>
+    <div class="text-center" id="volumeDebug"> Volume Debug</div>
+    <div class="text-center" id="speedDebug"> Speed Debug</div>
+    <div class="text-center" id="videoPositionDebug"> Video Position Debug</div>
+    
+    <h3 class="text-center mt-5">Instructions</h3>
+    <div class="mx-auto mb-5" id="accordion" style="width: 50%">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h5 class="mb-0">
+            <button class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              Voice Commands
+            </button>
+          </h5>
+        </div>
+    
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body">
+            Use the following commands to control the video. 
+            <span></span>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Simple Voice Commands</th>
+                  <th scope="col">Video Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>masterclass play</td>
+                  <td>Play video</td>
+                </tr>
+                <tr>
+                  <td>masterclass pause <i>or</i> masterclass stop</td>
+                  <td>Pause video</td>
+                </tr>
+                <tr>
+                  <td>masterclass restart</td>
+                  <td>Restart video</td>
+                </tr>
+                <tr>
+                  <td>masterclass skip <i>or</i> masterclass forward</td>
+                  <td>Skip ahead by 10 seconds</td>
+                </tr>
+                <tr>
+                  <td>masterclass rewind <i>or</i> masterclass backwards</td>
+                  <td>Rewind by 10 seconds</td>
+                </tr>
+                <tr>
+                  <td>masterclass volume up <i>or</i> masterclass louder</td>
+                  <td>Increase the volume by 10%</td>
+                </tr>
+                <tr>
+                  <td>masterclass volume down <i>or</i> masterclass quieter</td>
+                  <td>Decrease the volume by 10%</td>
+                </tr>
+                <tr>
+                  <td>masterclass increase speed <i>or</i> masterclass speed up</td>
+                  <td>Increase the speed by 0.25</td>
+                </tr>
+                <tr>
+                  <td>masterclass decrease speed <i>or</i> masterclass slow down  </td>
+                  <td>Decrease the speed by 0.25</td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Complex Voice Command</th>
+                  <th scope="col">Video Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>masterclass jump/go to <i>mm:ss</i> (eg. 10:54)</td>
+                  <td>Go to timestamp <i>mm:ss</i></td>
+                </tr>
+                <tr>
+                  <td>masterclass skip/forward <i>x</i> seconds/minutes</td>
+                  <td>Skip ahead by <i>x</i> seconds/minutes</td>
+                </tr>
+                <tr>
+                  <td>masterclass rewind/backwards by <i>x</i> seconds/minutes</td>
+                  <td>Rewind by <i>x</i> seconds/minutes</td>
+                </tr>
+                <tr>
+                  <td>masterclass change/set volume to <i>x</i></td>
+                  <td>Change volume to <i>x</i></td>
+                </tr>
+                <tr>
+                  <td>masterclass change/set speed to <i>x</i></td>
+                  <td>Change speed to <i>x</i></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingTwo">
+          <h5 class="mb-0">
+            <button class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Gesture Commands
+            </button>
+          </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+          <div class="card-body">
+            <div>
+              <div class="row">
+                <img class="fit-picture col-md-4" src="/img/open_palm.png">
+                <img class="fit-picture col-md-4" src="/img/fist.png">
+                <img class="fit-picture col-md-4" src="/img/point_right.png">
+                <img class="fit-picture col-md-4" src="/img/point_left.png">
+              </div>
+              <div>
+                <br>
+                <p>From left to right the gestures represent: start, stop, and skip forward.</p>
+              </div>
+              <div class="row">
+                <img class="fit-picture col-md-4" src="/img/double_open_palm.png">
+                <img class="fit-picture col-md-4" src="/img/double_fist.png">
+                <img class="fit-picture col-md-4" src="/img/point_up.png">
+                <img class="fit-picture col-md-4" src="/img/point_down.png">
+              </div>
+              <div>
+                <br>
+                <p>From left to right the gestures represent: rewind, volume up, and volume down.</p>
+              </div>
+            </div>
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Gesture Command</th>
+                  <th scope="col">Video Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Open palm</td>
+                  <td>Play video</td>
+                </tr>
+                <tr>
+                  <td>Fist</td>
+                  <td>Pause video</td>
+                </tr>
+                <tr>
+                  <td>Point right</td>
+                  <td>Skip ahead by 10 seconds</td>
+                </tr>
+                <tr>
+                  <td>Point left</td>
+                  <td>Rewind by 10 seconds</td>
+                </tr>
+                <tr>
+                  <td>Point up with two fingers</td>
+                  <td>Increase the volume by 10%</td>
+                </tr>
+                <tr>
+                  <td>Point down with two fingers</td>
+                  <td>Decrease the volume by 10%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App code -->
+    <!-- <script type="text/javascript" src="app/gestures.js"></script> -->
+
+    <script>import * as fp from "fingerpose";</script>
+    <!-- <script>import { FistGesture, OpenPalmGesture } from './gestures.js';</script> -->
+
+    <script type="text/javascript" src="app/speech.js"></script>
+    <script type="text/javascript" src="app/video.js"></script>
+    <script type="text/javascript" src="app/youtube.js"></script>
+    <script type="text/javascript" src="app/setupSpeech.js"></script>
+    <script type="text/javascript" src="app/gestures.js"></script>
+
+  </body>
+</html>
+
+
+
+

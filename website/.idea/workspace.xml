@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e0928ea7-cdc5-40b7-9bbf-1bd85fb3b602" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/icons/icon128.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/icons/icon16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/icons/icon19.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/icons/icon19_disabled.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/icons/icon38.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/icons/icon38_disabled.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/icons/icon48.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/icons/icon48_disabled.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/inject.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/inject.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/optional/options.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/optional/options.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/optional/options.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/optional/popup.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/optional/popup.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/optional/popup.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/setupSpeech.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrome-extension/shadow.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/website.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/gestures.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/setupSpeech.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/speech.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/video.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/youtube.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/app.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/fist.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/open_palm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/point_down.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/point_left.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/point_right.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/point_up.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backbone.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/famous.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/famous.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/jquery.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/underscore.min.js" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="27JoqfUgXY18NPCjETq5quCaDfE" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File" value="JavaScript" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/img" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="scratch.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$APPLICATION_CONFIG_DIR$/scratches/scratch.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Node.js.scratch.js" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e0928ea7-cdc5-40b7-9bbf-1bd85fb3b602" name="Changes" comment="" />
+      <created>1649047742203</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1649047742203</updated>
+      <workItem from="1649047743338" duration="23995000" />
+      <workItem from="1650177986106" duration="23467000" />
+      <workItem from="1650344461160" duration="160000" />
+      <workItem from="1651109105068" duration="26751000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch.js</url>
+          <line>117</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
