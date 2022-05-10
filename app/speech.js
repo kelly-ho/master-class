@@ -6,6 +6,9 @@
 //    processed, a boolean indicating whether the system reacted to the speech or not
 var processSpeech = function(transcript, hasFinal) {
   transcript = transcript.toLowerCase();
+  if (transcript.includes("master class")){
+    transcript = transcript.replace("master class", "masterclass")
+  }
   // Helper function to detect if any commands appear in a string
   var userSaid = function(str, commands) {
     for (var i = 0; i < commands.length; i++) {
