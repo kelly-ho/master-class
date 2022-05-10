@@ -47,7 +47,7 @@ camera.start();
 let lastGestureLeft = "";
 let lastGestureRight = "";
 let gestureDuration = 0;
-const requiredDuration = 500;
+const requiredDuration = 250;
 let predictionStartTS = Date.now();
 
 async function fingerpose(predictions, hands){
@@ -94,6 +94,14 @@ async function fingerpose(predictions, hands){
     }
     predictionStartTS = Date.now();
 
+    if (isGesture(pred_gestures, 'open_palm')) {
+        player.playVideo();
+        gestureDuration = 0;
+    }
+    else if (isGesture(pred_gestures, 'fist')) {
+        player.pauseVideo();
+        gestureDuration = 0;
+    }
     if(gestureDuration > requiredDuration) {
         if (pred_gestures['Left'] === 'open_palm' && pred_gestures['Right'] === 'open_palm') {
             var volume = player.getVolume() + 10;
@@ -109,12 +117,6 @@ async function fingerpose(predictions, hands){
         else if (isGesture(pred_gestures, 'thumbs_down')) {
             decreaseSpeed();
         }
-        else if (isGesture(pred_gestures, 'open_palm')) {
-            player.playVideo();
-        }
-        else if (isGesture(pred_gestures, 'fist')) {
-            player.pauseVideo();
-        }
         else if (isGesture(pred_gestures, 'point_left')) {
             skip(-10);
         }
@@ -122,14 +124,7 @@ async function fingerpose(predictions, hands){
             skip(10);
         }
         gestureDuration = 0;
-        /*
-        if (pred_gestures["Left"].length > 0 || pred_gestures["Right"].length > 0){
-            console.log("command activated");
-        }
-         */
     }
-    //console.log(pred_gestures);
-    //console.log("hit");
 }
 
 function reformat_prediction(prediction){

@@ -73,22 +73,18 @@ var processSpeech = function(transcript, hasFinal) {
 
   if (userSaid(transcript, ['masterclass play'])) {
     player.playVideo();
-    return true;
   }
   if (userSaid(transcript, ['masterclass stop', 'masterclass pause'])) {
     player.pauseVideo();
-    return true;
   }
   if (userSaid(transcript, ['masterclass restart'])) {
     player.seekTo(Number('0'), true);
-    return true;
   }
   if (userSaid(transcript, jumpCommands)) {
     var time = parseTimeVolumeSpeed(transcript, jumpCommands, 'jump');
     if (time !== null && (0 <= time < 60 ||  1000 <=time < 6000)) {
       time = time%100 + Math.floor(time/100)*60;
       player.seekTo(time, true);
-      return true;
     }
   }
   if (userSaid(transcript, skipCommands)) {
@@ -105,38 +101,31 @@ var processSpeech = function(transcript, hasFinal) {
       return true;
     }
   }
-  if (hasFinal && userSaid(transcript, ['masterclass skip', 'masterclass forward', 'masterclass forwards'])) {
+  if (userSaid(transcript, ['masterclass skip', 'masterclass forward', 'masterclass forwards'])) {
     player.seekTo(player.getCurrentTime()+10, true);
-    return true;
   }
-  if (hasFinal && userSaid(transcript, ['masterclass rewind', 'masterclass backward', 'masterclass backwards'])) {
+  if (userSaid(transcript, ['masterclass rewind', 'masterclass backward', 'masterclass backwards'])) {
     player.seekTo(player.getCurrentTime()-10, true);
-    return true;
   }
   if (userSaid(transcript, volumeCommands)) {
     var volume = parseTimeVolumeSpeed(transcript, volumeCommands, 'volume');
     if (volume !== null) {
       player.setVolume(Math.max(Math.min(volume, 100), 0));
-      return true; 
     }
   }
-  if (hasFinal && userSaid(transcript, ['masterclass volume up', 'masterclass louder'])) {
+  if (userSaid(transcript, ['masterclass volume up', 'masterclass louder'])) {
     var volume = player.getVolume() + 10;
     player.setVolume(Math.max(Math.min(volume, 100), 0));
-    return true;
   }
-  if (hasFinal && userSaid(transcript, ['masterclass volume down', 'masterclass quieter'])) {
+  if (userSaid(transcript, ['masterclass volume down', 'masterclass quieter'])) {
     var volume = player.getVolume() - 10;
     player.setVolume(Math.max(Math.min(volume, 100), 0));
-    return true;
   }
   if (userSaid(transcript, ['masterclass mute', 'masterclass volume off'])) {
     player.mute();
-    return true;
   }
   if (userSaid(transcript, ['masterclass unmute', 'masterclass volume on'])) {
     player.unMute();
-    return true;
   }
   if (userSaid(transcript, speedCommands)) {
     var speed = parseTimeVolumeSpeed(transcript, speedCommands, 'speed');
