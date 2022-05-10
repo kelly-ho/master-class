@@ -5,8 +5,8 @@
 // Output:
 //    processed, a boolean indicating whether the system reacted to the speech or not
 var processSpeech = function(transcript, hasFinal) {
-  // Helper function to detect if any commands appear in a string
   transcript = transcript.toLowerCase();
+  // Helper function to detect if any commands appear in a string
   var userSaid = function(str, commands) {
     for (var i = 0; i < commands.length; i++) {
       if (str.indexOf(commands[i]) > -1)
