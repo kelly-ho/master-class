@@ -30,14 +30,14 @@ hands.setOptions({
   minTrackingConfidence: 0.8
 });
 hands.onResults(onResults);
-const model = handpose.load();
+// const model = handpose.load(); //this is the slower version of handpose
 
 var cameraWidth = 256;
 var cameraHeight = 192;
 const camera = new Camera(videoElement, {
   onFrame: async () => {
     await hands.send({image: videoElement});
-    // model.estimateHands(videoElement).then((prediction, err)=>console.log(prediction));
+    // model.estimateHands(videoElement).then((prediction, err)=>console.log(prediction)); //this is the slower version of handpose
   },
   width: cameraWidth,
   height: cameraHeight
