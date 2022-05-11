@@ -1,6 +1,8 @@
 # master-class
 6.835 Final Project
 
+![image info](./img/github.jpeg)
+
 We propose and implement a system called MasterClass, which enables users to manipulate Youtube videos with voice and gesture commands. Our system supports eight gesture commands and over twenty voice commands to play or pause the video, change the volume or speed, skip or rewind, and jump to different timestamps. We utilize the HandPose ML model and the FingerPose library for Gesture Recognition and the WebSpeech API for Speech Recognition. The final product is a web app that allows users to learn new skills from a YouTube video without being at the laptop.
 
 
